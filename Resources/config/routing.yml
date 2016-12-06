@@ -1,0 +1,3 @@
+fgms_email_inquiries_homepage:
+    path:     /
+    defaults: { _controller: FgmsEmailInquiriesBundle:Default:index }
