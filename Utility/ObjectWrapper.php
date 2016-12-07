@@ -42,4 +42,9 @@ abstract class ObjectWrapper extends ValueWrapper
         if (!isset($this->obj->$key)) return null;
         return $this->obj->$key;
     }
+
+    public function unwrap()
+    {
+        return $this->obj;
+    }
 }

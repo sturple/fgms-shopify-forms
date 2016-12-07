@@ -63,4 +63,9 @@ abstract class ArrayWrapper extends ValueWrapper implements \ArrayAccess, \Itera
         if (!$this->offsetExists($key)) return null;
         return $this->arr[$key];
     }
+
+    public function unwrap()
+    {
+        return $this->arr;
+    }
 }

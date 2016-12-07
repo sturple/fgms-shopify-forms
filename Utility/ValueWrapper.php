@@ -28,6 +28,13 @@ abstract class ValueWrapper
         return $this->path . '/' . $key;
     }
 
+	/**
+	 * Returns the underlying value.
+	 *
+	 * @return array|object
+	 */
+	public abstract function unwrap();
+
     /**
      * Called to raise an exception indicating that a certain
 	 * string or integer key is not present.
