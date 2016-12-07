@@ -126,7 +126,7 @@ abstract class ValueWrapper
      * which may return null.
      *
      * These methods all accept exactly one string or
-     * integer argument: The key whole value shall be
+     * integer argument: The key whose value shall be
      * retrieved.
      */
     public function __call($name, array $arguments)
