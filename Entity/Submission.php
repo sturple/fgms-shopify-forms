@@ -148,7 +148,7 @@ class Submission
      */
     public function setTo(array $to)
     {
-        $this->to = \Fgms\EmailInquiriesBundle\Utility\Json::encode($to);
+        $this->to = \Fgms\EmailInquiriesBundle\Json\Json::encode($to);
 
         return $this;
     }
@@ -156,11 +156,11 @@ class Submission
     /**
      * Get to
      *
-     * @return array
+     * @return ArrayWrapper
      */
     public function getTo()
     {
-        return \Fgms\EmailInquiriesBundle\Utility\Json::decodeStringArray($this->to);
+        return \Fgms\EmailInquiriesBundle\Json\Json::decodeArray($this->to);
     }
 
     /**
