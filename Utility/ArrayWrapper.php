@@ -52,13 +52,12 @@ abstract class ArrayWrapper extends ValueWrapper implements \ArrayAccess, \Itera
         $this->raiseImmutable();
     }
 
-    protected function get($key)
+    protected function check($key)
     {
-        if (!$this->offsetExists($key)) $this->raiseMissing($key);
-        return $this->arr[$key];
+        return $this->offsetExists($key);
     }
 
-    protected function getOptional($key)
+    protected function get($key, $type)
     {
         if (!$this->offsetExists($key)) return null;
         return $this->arr[$key];

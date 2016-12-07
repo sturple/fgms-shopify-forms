@@ -140,4 +140,32 @@ class ObjectWrapperTest extends \PHPUnit_Framework_TestCase
         $this->expectThrows();
         $obj->getOptionalInteger('quux');
     }
+
+	public function testGetNull()
+	{
+		$obj = $this->create('{"foo":null}');
+		$val = $obj->getNull('foo');
+		$this->assertNull($val);
+	}
+
+	public function testGetNullMissing()
+	{
+		$obj = $this->create('{}');
+		$this->expectThrows();
+		$obj->getNull('foo');
+	}
+
+	public function testGetMultiple()
+	{
+		$obj = $this->create('{"foo":5}');
+		$val = $obj->getStringOrInteger('foo');
+		$this->assertSame(5,$val);
+	}
+
+	public function testGetMultipleMismatch()
+	{
+		$obj = $this->create('{"foo":5}');
+		$this->expectThrows();
+		$obj->getStringOrArray('foo');
+	}
 }

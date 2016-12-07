@@ -27,17 +27,13 @@ abstract class ObjectWrapper extends ValueWrapper
         if (!isset($this->obj->$key)) return null;
         return $this->obj->$key;
     }
-    
-    protected function get($key)
+
+    protected function check($key)
     {
-        //  Use property_exists rather than isset
-        //  so we get true for properties which
-        //  exist but which are set to null
-        if (!property_exists($this->obj,$key)) $this->raiseMissing($key);
-        return $this->obj->$key;
+        return property_exists($this->obj,$key);
     }
 
-    protected function getOptional($key)
+    protected function get($key, $type)
     {
         if (!isset($this->obj->$key)) return null;
         return $this->obj->$key;
