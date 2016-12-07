@@ -36,17 +36,17 @@ class Json
         return $retr;
     }
 
-    public static function decode($json, $assoc = false, $depth = 512, $options = 0)
+    public static function decode($json, $depth = 512, $options = 0)
     {
-        $retr = self::decodeRaw($json,$assoc,$depth,$options);
+        $retr = self::decodeRaw($json,false,$depth,$options);
         if (is_array($retr)) return new ArrayWrapper($retr,$json);
         if (is_object($retr)) return new ObjectWrapper($retr,$json);
         return $retr;
     }
 
-    public static function decodeArray($json, $assoc = false, $depth = 512, $options = 0)
+    public static function decodeArray($json, $depth = 512, $options = 0)
     {
-        $retr = self::decode($json,$assoc,$depth,$options);
+        $retr = self::decode($json,$depth,$options);
         if (!($retr instanceof ArrayWrapper)) throw new Exception\TypeMismatchException(
             'array',
             $retr,
@@ -58,7 +58,7 @@ class Json
 
     public static function decodeObject($json, $depth = 512, $options = 0)
     {
-        $retr = self::decode($json,false,$depth,$options);
+        $retr = self::decode($json,$depth,$options);
         if (!($retr instanceof ObjectWrapper)) throw new Exception\TypeMismatchException(
             'object',
             $retr,
@@ -70,7 +70,7 @@ class Json
 
     public static function decodeStringArray($json, $options = 0)
     {
-        $retr = self::decodeArray($json,false,2,$options);
+        $retr = self::decodeArray($json,2,$options);
         foreach ($retr as $k => $v) if (!is_string($v)) throw new Exception\TypeMismatchException(
             'string',
             $v,
