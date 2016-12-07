@@ -38,6 +38,11 @@ class Field
     private $params = '{}';
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $renderOrder;
+
+    /**
      * Get id
      *
      * @return integer
@@ -158,5 +163,29 @@ class Field
     public function getParams()
     {
         return \Fgms\EmailInquiriesBundle\Json\Json::decodeObject($this->params);
+    }
+
+    /**
+     * Set renderOrder
+     *
+     * @param integer $renderOrder
+     *
+     * @return Field
+     */
+    public function setRenderOrder($renderOrder)
+    {
+        $this->renderOrder = $renderOrder;
+
+        return $this;
+    }
+
+    /**
+     * Get renderOrder
+     *
+     * @return integer
+     */
+    public function getRenderOrder()
+    {
+        return $this->renderOrder;
     }
 }
