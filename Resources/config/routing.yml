@@ -1,0 +1,3 @@
+fgms_email_inquiries_submit:
+    path: /submit/{key}
+    defaults: { _controller: FgmsEmailInquiriesBundle:Submit:submit }
