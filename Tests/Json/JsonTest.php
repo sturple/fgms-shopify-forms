@@ -53,6 +53,12 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         \Fgms\EmailInquiriesBundle\Json\Json::decodeArray('{}');
     }
 
+    public function testDecodeObjectMismatch()
+    {
+        $this->expectException(\Fgms\EmailInquiriesBundle\Json\Exception\TypeMismatchException::class);
+        \Fgms\EmailInquiriesBundle\Json\Json::decodeObject('[]');
+    }
+
     public function testDecodeStringArrayMismatch()
     {
         $this->expectException(\Fgms\EmailInquiriesBundle\Json\Exception\TypeMismatchException::class);

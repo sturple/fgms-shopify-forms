@@ -56,6 +56,18 @@ class Json
         return $retr;
     }
 
+    public static function decodeObject($json, $depth = 512, $options = 0)
+    {
+        $retr = self::decode($json,false,$depth,$options);
+        if (!($retr instanceof ObjectWrapper)) throw new Exception\TypeMismatchException(
+            'object',
+            $retr,
+            '',
+            $json
+        );
+        return $retr;
+    }
+
     public static function decodeStringArray($json, $options = 0)
     {
         $retr = self::decodeArray($json,false,2,$options);
