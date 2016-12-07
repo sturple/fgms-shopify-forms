@@ -33,6 +33,11 @@ class Form
     private $fields;
 
     /**
+     * @ORM\Column(type="text")
+     */
+    private $params = '{}';
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -140,5 +145,29 @@ class Form
     public function getFields()
     {
         return $this->fields;
+    }
+
+    /**
+     * Set params
+     *
+     * @param object $params
+     *
+     * @return Form
+     */
+    public function setParams($params)
+    {
+        $this->params = \Fgms\EmailInquiriesBundle\Json\Json::encode($params);
+
+        return $this;
+    }
+
+    /**
+     * Get params
+     *
+     * @return ObjectWrapper
+     */
+    public function getParams()
+    {
+        return \Fgms\EmailInquiriesBundle\Json\Json::decodeObject($this->params);
     }
 }

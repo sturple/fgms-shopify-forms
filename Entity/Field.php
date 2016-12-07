@@ -28,6 +28,16 @@ class Field
     private $fieldSubmissions;
 
     /**
+     * @ORM\Column(type="string",length=50)
+     */
+    private $type;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $params = '{}';
+
+    /**
      * Get id
      *
      * @return integer
@@ -100,5 +110,53 @@ class Field
     public function getFieldSubmissions()
     {
         return $this->fieldSubmissions;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return Field
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set params
+     *
+     * @param object $params
+     *
+     * @return Field
+     */
+    public function setParams($params)
+    {
+        $this->params = \Fgms\EmailInquiriesBundle\Json\Json::encode($params);
+
+        return $this;
+    }
+
+    /**
+     * Get params
+     *
+     * @return ObjectWrapper
+     */
+    public function getParams()
+    {
+        return \Fgms\EmailInquiriesBundle\Json\Json::decodeObject($this->params);
     }
 }

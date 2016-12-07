@@ -28,6 +28,11 @@ class FieldSubmission
     private $field;
 
     /**
+     * @ORM\Column(type="text")
+     */
+    private $value = '{}';
+
+    /**
      * Get id
      *
      * @return integer
@@ -83,5 +88,29 @@ class FieldSubmission
     public function getField()
     {
         return $this->field;
+    }
+
+    /**
+     * Set value
+     *
+     * @param object $value
+     *
+     * @return FieldSubmission
+     */
+    public function setValue($value)
+    {
+        $this->value = \Fgms\EmailInquiriesBundle\Json\Json::encode($value);
+
+        return $this;
+    }
+
+    /**
+     * Get value
+     *
+     * @return ObjectWrapper
+     */
+    public function getValue()
+    {
+        return \Fgms\EmailInquiriesBundle\Json\Json::decodeObject($this->value);
     }
 }
