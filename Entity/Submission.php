@@ -33,9 +33,24 @@ class Submission
     private $referer;
 
     /**
+     * @ORM\Column(type="text",name="`from`")
+     */
+    private $from = '[]';
+
+    /**
      * @ORM\Column(type="text")
      */
     private $to = '[]';
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $cc = '[]';
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $bcc = '[]';
 
     /**
      * @ORM\Column(type="text")
@@ -274,5 +289,77 @@ class Submission
     public function getFieldSubmissions()
     {
         return $this->fieldSubmissions;
+    }
+
+    /**
+     * Set from
+     *
+     * @param array $from
+     *
+     * @return Submission
+     */
+    public function setFrom(array $from)
+    {
+        $this->from = \Fgms\EmailInquiriesBundle\Json\Json::encode($from);
+
+        return $this;
+    }
+
+    /**
+     * Get from
+     *
+     * @return ArrayWrapper
+     */
+    public function getFrom()
+    {
+        return \Fgms\EmailInquiriesBundle\Json\Json::decodeArray($this->from);
+    }
+
+    /**
+     * Set cc
+     *
+     * @param array $cc
+     *
+     * @return Submission
+     */
+    public function setCc(array $cc)
+    {
+        $this->cc = \Fgms\EmailInquiriesBundle\Json\Json::encode($cc);
+
+        return $this;
+    }
+
+    /**
+     * Get cc
+     *
+     * @return ArrayWrapper
+     */
+    public function getCc()
+    {
+        return \Fgms\EmailInquiriesBundle\Json\Json::decodeArray($this->cc);
+    }
+
+    /**
+     * Set bcc
+     *
+     * @param array $bcc
+     *
+     * @return Submission
+     */
+    public function setBcc(array $bcc)
+    {
+        $this->bcc = \Fgms\EmailInquiriesBundle\Json\Json::encode($bcc);
+
+        return $this;
+    }
+
+    /**
+     * Get bcc
+     *
+     * @return ArrayWrapper
+     */
+    public function getBcc()
+    {
+        return \Fgms\EmailInquiriesBundle\Json\Json::decodeArray($this->bcc);
     }
 }
