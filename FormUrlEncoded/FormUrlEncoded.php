@@ -1,12 +1,12 @@
 <?php
 
-namespace Fgms\EmailInquiriesBundle\Utility;
+namespace Fgms\EmailInquiriesBundle\FormUrlEncoded;
 
 /**
  * Contains utilities for working with form encoded
  * data.
  */
-class Form
+class FormUrlEncoded
 {
     /**
      * Decodes a form encoded string.
@@ -18,11 +18,11 @@ class Form
     public static function decode($str)
     {
         $retr = new \stdClass();
-        if ($str === '') return $retr;
+        if ($str === '') return new ObjectWrapper($retr,$str);
         $split = explode('&',$str);
         foreach ($split as $entry) {
             $kvp = explode('=',$entry);
-            if (count($kvp) !== 2) throw new Exception\FormDecodeException(
+            if (count($kvp) !== 2) throw new Exception\DecodeException(
                 sprintf(
                     'Entry "%s" did not split on "=" into key and value',
                     $entry
@@ -40,6 +40,6 @@ class Form
             }
             $retr->$key[] = $value;
         }
-        return $retr;
+        return new ObjectWrapper($retr,$str);
     }
 }
