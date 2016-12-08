@@ -7,7 +7,7 @@ namespace Fgms\EmailInquiriesBundle\Field;
  * filling out the form and sets the resulting
  * email to Reply-To them.
  */
-class EmailField extends Field
+class EmailField extends TemplateField
 {
     use HasStringValue;
 
@@ -22,5 +22,11 @@ class EmailField extends Field
     {
         $fs = $this->getFieldSubmission($submission);
         $message->setReplyTo([$fs->getValue()->getString('email') => null]);
+    }
+
+    public function render(\Fgms\EmailInquiriesBundle\Entity\Submission $submission)
+    {
+        $value = $this->getFieldSubmission($submission)->getValue()->getString('email');
+        return $this->renderTemplate($submission,['email' => $value]);
     }
 }

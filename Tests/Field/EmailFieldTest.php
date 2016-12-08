@@ -5,12 +5,17 @@ namespace Fgms\EmailInquiriesBundle\Tests\Field;
 class EmailFieldTest extends \PHPUnit_Framework_TestCase
 {
     private $field;
+    private $twig;
 
     protected function setUp()
     {
+        $this->twig = new \Twig_Loader_Array([
+            'FgmsEmailInquiriesBundle:Field:email.html.twig' => '{{email|raw}}'
+        ]);
         $entity = new \Fgms\EmailInquiriesBundle\Entity\Field();
         $entity->setParams((object)['name' => 'email']);
-        $this->field = new \Fgms\EmailInquiriesBundle\Field\EmailField($entity);
+        $twig = new \Twig_Environment($this->twig);
+        $this->field = new \Fgms\EmailInquiriesBundle\Field\EmailField($entity,$twig);
     }
 
     public function testSubmit()
@@ -48,5 +53,20 @@ class EmailFieldTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1,$rt);
         $this->assertArrayHasKey('foo@example.org',$rt);
         $this->assertNull($rt['foo@example.org']);
+    }
+
+    public function testRender()
+    {
+        $submission = new \Fgms\EmailInquiriesBundle\Entity\Submission();
+        $fs = new \Fgms\EmailInquiriesBundle\Entity\FieldSubmission();
+        $fs->setSubmission($submission)
+            ->setField($this->field->getField())
+            ->setValue((object)['email' => 'sturple@fifthgeardev.com']);
+        $this->field->getField()->addFieldSubmission($fs);
+        $submission->addFieldSubmission($fs);
+        $arr = $this->field->render($submission);
+        $this->assertCount(1,$arr);
+        $this->assertArrayHasKey(0,$arr);
+        $this->assertSame('sturple@fifthgeardev.com',$arr[0]);
     }
 }

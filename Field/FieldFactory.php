@@ -14,7 +14,7 @@ class FieldFactory implements FieldFactoryInterface
     public function create(\Fgms\EmailInquiriesBundle\Entity\Field $field)
     {
         $type = $field->getType();
-        if ($type === 'email') return new EmailField($field);
+        if ($type === 'email') return new EmailField($field,$this->twig);
         if ($type === 'inquiry') return new InquiryField($field,$this->twig);
         if ($type === 'name') return new NameField($field,$this->twig);
         throw new Exception\UnrecognizedTypeException($field);
