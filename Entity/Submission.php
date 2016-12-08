@@ -38,6 +38,16 @@ class Submission
     private $from = '[]';
 
     /**
+     * @ORM\Column(type="text")
+     */
+    private $sender = '[]';
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $replyTo;
+
+    /**
      * @ORM\Column(type="text",name="`to`")
      */
     private $to = '[]';
@@ -51,6 +61,11 @@ class Submission
      * @ORM\Column(type="text")
      */
     private $bcc = '[]';
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $headers;
 
     /**
      * @ORM\Column(type="text")
@@ -361,5 +376,77 @@ class Submission
     public function getBcc()
     {
         return \Fgms\EmailInquiriesBundle\Json\Json::decodeArray($this->bcc);
+    }
+
+    /**
+     * Set sender
+     *
+     * @param array $sender
+     *
+     * @return Submission
+     */
+    public function setSender(array $sender)
+    {
+        $this->sender = \Fgms\EmailInquiriesBundle\Json\Json::encode($sender);
+
+        return $this;
+    }
+
+    /**
+     * Get sender
+     *
+     * @return ArrayWrapper
+     */
+    public function getSender()
+    {
+        return \Fgms\EmailInquiriesBundle\Json\Json::decodeArray($this->sender);
+    }
+
+    /**
+     * Set replyTo
+     *
+     * @param array $replyTo
+     *
+     * @return Submission
+     */
+    public function setReplyTo(array $replyTo)
+    {
+        $this->replyTo = \Fgms\EmailInquiriesBundle\Json\Json::encode($replyTo);
+
+        return $this;
+    }
+
+    /**
+     * Get replyTo
+     *
+     * @return ArrayWrapper
+     */
+    public function getReplyTo()
+    {
+        return \Fgms\EmailInquiriesBundle\Json\Json::decodeArray($this->replyTo);
+    }
+
+    /**
+     * Set headers
+     *
+     * @param string $headers
+     *
+     * @return Submission
+     */
+    public function setHeaders($headers)
+    {
+        $this->headers = $headers;
+
+        return $this;
+    }
+
+    /**
+     * Get headers
+     *
+     * @return string
+     */
+    public function getHeaders()
+    {
+        return $this->headers;
     }
 }
