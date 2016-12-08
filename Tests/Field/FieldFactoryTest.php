@@ -25,4 +25,28 @@ class FieldFactoryTest extends \PHPUnit_Framework_TestCase
         $this->field->setType('');  //  Just make sure the type isn't null since that should never happen...
         $this->create();
     }
+
+    public function testCreateEmail()
+    {
+        $this->field->setType('email');
+        $field = $this->create();
+        $this->assertInstanceOf(\Fgms\EmailInquiriesBundle\Field\EmailField::class,$field);
+        $this->assertSame($this->field,$field->getField());
+    }
+
+    public function testCreateInquiry()
+    {
+        $this->field->setType('inquiry');
+        $field = $this->create();
+        $this->assertInstanceOf(\Fgms\EmailInquiriesBundle\Field\InquiryField::class,$field);
+        $this->assertSame($this->field,$field->getField());
+    }
+
+    public function testCreateName()
+    {
+        $this->field->setType('name');
+        $field = $this->create();
+        $this->assertInstanceOf(\Fgms\EmailInquiriesBundle\Field\NameField::class,$field);
+        $this->assertSame($this->field,$field->getField());
+    }
 }
