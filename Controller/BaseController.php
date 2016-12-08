@@ -35,8 +35,9 @@ abstract class BaseController extends \Symfony\Bundle\FrameworkBundle\Controller
         //  Gather dependencies and create Form domain
         //  object
         $swift = $this->container->get('swiftmailer.mailer');
+        $twig = $this->container->get('twig');
         $factory = $this->getFieldFactory();
-        return new \Fgms\EmailInquiriesBundle\Form\Form($form,$factory,$swift);
+        return new \Fgms\EmailInquiriesBundle\Form\Form($form,$factory,$swift,$twig);
     }
 
     protected function getEntityManager()

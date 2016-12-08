@@ -8,6 +8,7 @@ namespace Fgms\EmailInquiriesBundle\Form;
 class Form implements FormInterface
 {
     private $swift;
+    private $twig;
     private $form;
     private $fields;
 
@@ -23,10 +24,11 @@ class Form implements FormInterface
      * @param Swift_Mailer $swift
      *  The mailer which shall be used to send emails.
      */
-    public function __construct(\Fgms\EmailInquiriesBundle\Entity\Form $form, \Fgms\EmailInquiriesBundle\Field\FieldFactoryInterface $factory, \Swift_Mailer $swift)
+    public function __construct(\Fgms\EmailInquiriesBundle\Entity\Form $form, \Fgms\EmailInquiriesBundle\Field\FieldFactoryInterface $factory, \Swift_Mailer $swift, \Twig_Environment $twig)
     {
         $this->form = $form;
         $this->swift = $swift;
+        $this->twig = $twig;
         $this->fields = [];
         foreach ($this->form->getFields() as $field) {
             $this->fields[] = $factory->create($field);
@@ -84,6 +86,21 @@ class Form implements FormInterface
             ->setBcc($this->toArray($msg->getBcc()));
     }
 
+    private function getContentType($template)
+    {
+        $ct = $this->form->getParams()->getOptionalString('content_type');
+        if (!is_null($ct)) return $ct;
+        if (preg_match('/\\.html\\.twig$/u',$template)) return 'text/html';
+        return 'text/plain';
+    }
+
+    private function getCharset()
+    {
+        $cs = $this->form->getParams()->getOptionalString('charset');
+        if (!is_null($cs)) return $cs;
+        return 'UTF-8';
+    }
+
     public function submit(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $obj, \Fgms\EmailInquiriesBundle\Entity\Submission $submission)
     {
         foreach ($this->fields as $field) $field->submit($obj,$submission);
@@ -93,13 +110,21 @@ class Form implements FormInterface
             ->setTo($this->getEmails('to',true))
             ->setCc($this->getEmails('cc',true))
             ->setBcc($this->getEmails('bcc',true))
-            ->setSubject((string)$params->getOptionalString('subject'));
+            ->setSubject((string)$params->getOptionalString('subject'))
+            ->setCharset($this->getCharset());
         $sections = [];
         foreach ($this->fields as $field) {
             $sections = array_merge($sections,$field->render($submission));
         }
-        //  TODO: Render template to body
-        //  TODO: Content type of email?
+        $ctx = [
+            'form' => $this->form,
+            'submission' => $submission,
+            'sections' => $sections
+        ];
+        $template = $params->getString('template');
+        $body = $this->twig->render($template,$ctx);
+        $msg->setBody($body)
+            ->setContentType($this->getContentType($template));
         foreach ($this->fields as $field) {
             $field->filterMessage($msg,$submission);
         }
