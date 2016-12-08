@@ -82,8 +82,11 @@ class Form implements FormInterface
             ->setBody((string)$msg->getBody())
             ->setForm($this->form)
             ->setFrom($this->toArray($msg->getFrom()))
+            ->setSender($this->toArray($msg->getSender()))
+            ->setReplyTo($this->toArray($msg->getReplyTo()))
             ->setCc($this->toArray($msg->getCc()))
-            ->setBcc($this->toArray($msg->getBcc()));
+            ->setBcc($this->toArray($msg->getBcc()))
+            ->setHeaders((string)$msg->getHeaders());
     }
 
     private function getContentType($template)
@@ -116,6 +119,8 @@ class Form implements FormInterface
         $params = $this->form->getParams();
         $msg->setFrom($this->getEmails('from'))
             ->setTo($this->getEmails('to',true))
+            ->setSender($this->getEmails('sender',true))
+            ->setReplyTo($this->getEmails('reply_to',true))
             ->setCc($this->getEmails('cc',true))
             ->setBcc($this->getEmails('bcc',true))
             ->setSubject((string)$params->getOptionalString('subject'))

@@ -121,11 +121,17 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $cc = $submission->getCc();
         $this->assertCount(0,$cc);
         $bcc = $submission->getBcc();
+        $this->assertCount(1,$bcc);
         $this->assertSame('foo@example.org',$bcc[0]->address);
         $this->assertFalse(isset($bcc[0]->name));
+        $reply_to = $submission->getReplyTo();
+        $this->assertCount(0,$reply_to);
+        $sender = $submission->getSender();
+        $this->assertCount(0,$sender);
         $this->assertSame($this->form,$submission->getForm());
         $this->assertSame('',$submission->getSubject());
         $this->assertSame($body,$submission->getBody());
+        $this->assertNotEmpty($submission->getHeaders());
         //  Verify interaction with MockField objects
         $this->assertTrue($field_object_a->isRendered());
         $this->assertTrue($field_object_b->isRendered());
