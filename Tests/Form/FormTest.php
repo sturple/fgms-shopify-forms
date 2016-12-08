@@ -81,11 +81,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $submission->setIp('127.0.0.1')
             ->setCreated(clone $dt)
             ->setReferer('http://google.ca');
-        //  TODO: Setup
         $form = $this->create();
-        $request = new \Fgms\EmailInquiriesBundle\Utility\BasicObjectWrapper((object)[
-            //  TODO: Actually have request data
-        ]);
+        $request = new \Fgms\EmailInquiriesBundle\Utility\BasicObjectWrapper(new \stdClass());
         $form->submit($request,$submission);
         //  Verify sent emails
         $msgs = $this->swift->getMessages();
