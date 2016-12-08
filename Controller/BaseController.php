@@ -15,10 +15,15 @@ abstract class BaseController extends \Symfony\Bundle\FrameworkBundle\Controller
         return new \Symfony\Component\HttpKernel\Exception\BadRequestHttpException($message,$previous);
     }
 
+    protected function getTwigEnvironment()
+    {
+        return $this->container->get('twig');
+    }
+
     protected function getFieldFactory()
     {
-        //  In future parameters may be needed here
-        return new \Fgms\EmailInquiriesBundle\Field\FieldFactory();
+        $twig = $this->getTwigEnvironment();
+        return new \Fgms\EmailInquiriesBundle\Field\FieldFactory($twig);
     }
 
     protected function getForm($key)
@@ -35,7 +40,7 @@ abstract class BaseController extends \Symfony\Bundle\FrameworkBundle\Controller
         //  Gather dependencies and create Form domain
         //  object
         $swift = $this->container->get('swiftmailer.mailer');
-        $twig = $this->container->get('twig');
+        $twig = $this->getTwigEnvironment();
         $factory = $this->getFieldFactory();
         return new \Fgms\EmailInquiriesBundle\Form\Form($form,$factory,$swift,$twig);
     }

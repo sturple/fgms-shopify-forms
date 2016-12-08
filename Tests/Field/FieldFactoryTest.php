@@ -9,7 +9,8 @@ class FieldFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->factory = new \Fgms\EmailInquiriesBundle\Field\FieldFactory();
+        $twig = new \Twig_Environment(new \Twig_Loader_Array());
+        $this->factory = new \Fgms\EmailInquiriesBundle\Field\FieldFactory($twig);
         $this->field = new \Fgms\EmailInquiriesBundle\Entity\Field();
     }
 
