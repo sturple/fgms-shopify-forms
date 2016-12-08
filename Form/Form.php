@@ -77,7 +77,7 @@ class Form implements FormInterface
     {
         $submission->setTo($this->toArray($msg->getTo()))
             ->setSubject($msg->getSubject())
-            ->setBody($msg->getBody())
+            ->setBody((string)$msg->getBody())
             ->setForm($this->form)
             ->setFrom($this->toArray($msg->getFrom()))
             ->setCc($this->toArray($msg->getCc()))
