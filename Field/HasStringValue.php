@@ -6,7 +6,7 @@ namespace Fgms\EmailInquiriesBundle\Field;
  * A mixin for fields which extract a single field
  * from the request which they expect to be a string.
  */
-trait StringField
+trait HasStringValue
 {
     private function getValue(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $obj)
     {

@@ -9,7 +9,7 @@ namespace Fgms\EmailInquiriesBundle\Field;
  */
 class EmailField extends Field
 {
-    use StringField;
+    use HasStringValue;
 
     public function submit(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $obj, \Fgms\EmailInquiriesBundle\Entity\Submission $submission)
     {
