@@ -43,6 +43,7 @@ class Form
     public function __construct()
     {
         $this->submissions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fields = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
