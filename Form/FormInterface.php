@@ -21,10 +21,8 @@ interface FormInterface
      * @param ValueWrapper $obj
      *  An object representing the values of the HTTP request
      *  which was submitted.
-     *
-     * @return Submission
-     *  A Submission entity representing the submission
-     *  of the request.
+     * @param Submission $submission
+     *  A Submission entity representing the submission.
      */
-    public function submit(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $obj);
+    public function submit(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $obj, \Fgms\EmailInquiriesBundle\Entity\Submission $submission);
 }
