@@ -38,7 +38,7 @@ class Submission
     private $from = '[]';
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text",name="`to`")
      */
     private $to = '[]';
 
