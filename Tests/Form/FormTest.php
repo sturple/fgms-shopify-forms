@@ -15,6 +15,20 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->factory = new \Fgms\EmailInquiriesBundle\Field\MockFieldFactory();
     }
 
+    private function createField($id, $type, $order, array $params = [])
+    {
+        $retr = new \Fgms\EmailInquiriesBundle\Entity\Field();
+        $retr->setForm($this->form)
+            ->setType($type)
+            ->setRenderOrder($order)
+            ->setParams((object)$params);
+        $rc = new \ReflectionClass($retr);
+        $prop = $rc->getProperty('id');
+        $prop->setAccessible(true);
+        $prop->setValue($retr,$id);
+        return $retr;
+    }
+
     private function create(array $params = [])
     {
         $params = array_merge([
@@ -40,6 +54,14 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     public function testSubmit()
     {
+        $field_entity_a = $this->createField(1,'foo',1);
+        $field_object_a = new \Fgms\EmailInquiriesBundle\Field\MockField($field_entity_a);
+        $this->factory->addField($field_object_a);
+        $this->form->addField($field_entity_a);
+        $field_entity_b = $this->createField(2,'bar',0);
+        $field_object_b = new \Fgms\EmailInquiriesBundle\Field\MockField($field_entity_b);
+        $this->factory->addField($field_object_b);
+        $this->form->addField($field_entity_b);
         $submission = new \Fgms\EmailInquiriesBundle\Entity\Submission();
         $dt = new \DateTime();
         $submission->setIp('127.0.0.1')
@@ -69,6 +91,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1,$bcc);
         $this->assertArrayHasKey('foo@example.org',$bcc);
         $this->assertNull($bcc['foo@example.org']);
+        //  TODO: Verify body
         //  Verify Submission entity
         $this->assertSame('127.0.0.1',$submission->getIp());
         $this->assertSame($dt->getTimestamp(),$submission->getCreated()->getTimestamp());
@@ -88,6 +111,15 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(isset($bcc[0]->name));
         $this->assertSame($this->form,$submission->getForm());
         $this->assertSame('',$submission->getSubject());
-        //  TODO
+        //  TODO: Verify body
+        //  Verify interaction with MockField objects
+        $this->assertTrue($field_object_a->isRendered());
+        $this->assertTrue($field_object_b->isRendered());
+        $this->assertSame($request,$field_object_a->getRequest());
+        $this->assertSame($request,$field_object_b->getRequest());
+        $this->assertSame($submission,$field_object_a->getSubmission());
+        $this->assertSame($submission,$field_object_b->getSubmission());
+        $this->assertSame($msg,$field_object_a->getMessage());
+        $this->assertSame($msg,$field_object_b->getMessage());
     }
 }
