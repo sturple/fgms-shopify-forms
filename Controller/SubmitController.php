@@ -82,7 +82,19 @@ class SubmitController extends BaseController
         $submission->setIp($request->getClientIp())
             ->setCreated(new \DateTime())
             ->setReferer($request->headers->get('referer'));
-        $form->submit($normalized,$submission);
+        try {
+            $form->submit($normalized,$submission);
+        } catch (\Fgms\EmailInquiriesBundle\Form\Exception\MissingException $ex) {
+            throw $this->createBadRequestException(
+                'Missing request data',
+                $ex
+            );
+        } catch (\Fgms\EmailInquiriesBundle\Form\Exception\TypeMismatchException $ex) {
+            throw $this->createBadRequestException(
+                'Request data has unexpected type',
+                $ex
+            );
+        }
         $em = $this->getEntityManager();
         $em->persist($submission);
         $em->flush();
