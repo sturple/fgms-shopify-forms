@@ -7,8 +7,10 @@ namespace Fgms\EmailInquiriesBundle\Field;
  * filling out the form and sets the resulting
  * email to Reply-To them.
  */
-class EmailField extends StringField
+class EmailField extends Field
 {
+    use StringField;
+
     public function submit(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $obj, \Fgms\EmailInquiriesBundle\Entity\Submission $submission)
     {
         $email = $this->getValue($obj);
