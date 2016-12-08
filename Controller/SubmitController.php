@@ -78,7 +78,11 @@ class SubmitController extends BaseController
     {
         $normalized = $this->normalize($request);
         $form = $this->getForm($key);
-        $submission = $form->submit($normalized);
-        die();
+        $submission = new \Fgms\EmailInquiriesBundle\Entity\Submission();
+        $submission->setIp($request->getClientIp())
+            ->setCreated(new \DateTime())
+            ->setReferer($request->headers->get('referer'));
+        $form->submit($normalized,$submission);
+        return $this->render('FgmsEmailInquiriesBundle:Default:index.html.twig');
     }
 }
