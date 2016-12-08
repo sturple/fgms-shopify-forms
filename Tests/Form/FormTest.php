@@ -136,4 +136,61 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($msg,$field_object_a->getMessage());
         $this->assertSame($msg,$field_object_b->getMessage());
     }
+
+    public function testSubmitContentTypeDetectHtml()
+    {
+        $submission = new \Fgms\EmailInquiriesBundle\Entity\Submission();
+        $submission->setIp('127.0.0.1')
+            ->setCreated(new \DateTime())
+            ->setReferer('http://google.ca');
+        $form = $this->create([
+            'template' => 'test.html.twig'
+        ]);
+        $this->twig->setTemplate('test.html.twig','');
+        $request = new \Fgms\EmailInquiriesBundle\Utility\BasicObjectWrapper(new \stdClass());
+        $form->submit($request,$submission);
+        //  Verify content-type
+        $msgs = $this->swift->getMessages();
+        $this->assertCount(1,$msgs);
+        $msg = $msgs[0];
+        $this->assertSame('text/html',$msg->getContentType());
+    }
+
+    public function testSubmitContentType()
+    {
+        $submission = new \Fgms\EmailInquiriesBundle\Entity\Submission();
+        $submission->setIp('127.0.0.1')
+            ->setCreated(new \DateTime())
+            ->setReferer('http://google.ca');
+        $form = $this->create([
+            'content_type' => 'foo'
+        ]);
+        $this->twig->setTemplate('test.html.twig','');
+        $request = new \Fgms\EmailInquiriesBundle\Utility\BasicObjectWrapper(new \stdClass());
+        $form->submit($request,$submission);
+        //  Verify content-type
+        $msgs = $this->swift->getMessages();
+        $this->assertCount(1,$msgs);
+        $msg = $msgs[0];
+        $this->assertSame('foo',$msg->getContentType());
+    }
+
+    public function testSubmitCharset()
+    {
+        $submission = new \Fgms\EmailInquiriesBundle\Entity\Submission();
+        $submission->setIp('127.0.0.1')
+            ->setCreated(new \DateTime())
+            ->setReferer('http://google.ca');
+        $form = $this->create([
+            'charset' => 'ASCII'
+        ]);
+        $this->twig->setTemplate('test.html.twig','');
+        $request = new \Fgms\EmailInquiriesBundle\Utility\BasicObjectWrapper(new \stdClass());
+        $form->submit($request,$submission);
+        //  Verify content-type
+        $msgs = $this->swift->getMessages();
+        $this->assertCount(1,$msgs);
+        $msg = $msgs[0];
+        $this->assertSame('ASCII',$msg->getCharset());
+    }
 }
