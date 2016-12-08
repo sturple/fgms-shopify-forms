@@ -38,4 +38,10 @@ abstract class BaseController extends \Symfony\Bundle\FrameworkBundle\Controller
         $factory = $this->getFieldFactory();
         return new \Fgms\EmailInquiriesBundle\Form\Form($form,$factory,$swift);
     }
+
+    protected function getEntityManager()
+    {
+        $doctrine = $this->getDoctrine();
+        return $doctrine->getEntityManager();
+    }
 }

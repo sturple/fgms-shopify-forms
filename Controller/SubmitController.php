@@ -83,6 +83,9 @@ class SubmitController extends BaseController
             ->setCreated(new \DateTime())
             ->setReferer($request->headers->get('referer'));
         $form->submit($normalized,$submission);
+        $em = $this->getEntityManager();
+        $em->persist($submission);
+        $em->flush();
         return $this->render('FgmsEmailInquiriesBundle:Default:index.html.twig');
     }
 }
