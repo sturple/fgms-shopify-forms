@@ -129,8 +129,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
         //  Verify interaction with MockField objects
         $this->assertTrue($field_object_a->isRendered());
         $this->assertTrue($field_object_b->isRendered());
-        $this->assertSame($request,$field_object_a->getRequest());
-        $this->assertSame($request,$field_object_b->getRequest());
+        $this->assertSame($request->unwrap(),$field_object_a->getRequest()->unwrap());
+        $this->assertSame($request->unwrap(),$field_object_b->getRequest()->unwrap());
         $this->assertSame($submission,$field_object_a->getSubmission());
         $this->assertSame($submission,$field_object_b->getSubmission());
         $this->assertSame($msg,$field_object_a->getMessage());

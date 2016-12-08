@@ -6,7 +6,7 @@ trait Wrapper
 {
     private $raw;
 
-    protected function raiseMissing($key)
+    public function raiseMissing($key)
     {
         throw new Exception\MissingException(
             $this->join($key),
@@ -14,7 +14,7 @@ trait Wrapper
         );
     }
 
-    protected function raiseTypeMismatch($key, $expected, $actual)
+    public function raiseTypeMismatch($key, $expected, $actual)
     {
         throw new Exception\TypeMismatchException(
             $expected,
@@ -24,12 +24,12 @@ trait Wrapper
         );
     }
 
-    protected function wrapArray($key, array $value)
+    public function wrapArray($key, array $value)
     {
         return new ArrayWrapper($value,$this->raw,$this->join($key));
     }
 
-    protected function wrapObject($key, $value)
+    public function wrapObject($key, $value)
     {
         return new ObjectWrapper($value,$this->raw,$this->join($key));
     }

@@ -28,12 +28,12 @@ abstract class ObjectWrapper extends ValueWrapper
         return $this->obj->$key;
     }
 
-    protected function check($key, array $types)
+    public function check($key, array $types)
     {
         return property_exists($this->obj,$key);
     }
 
-    protected function get($key, array $types)
+    public function get($key, array $types)
     {
         if (!isset($this->obj->$key)) return null;
         return $this->obj->$key;

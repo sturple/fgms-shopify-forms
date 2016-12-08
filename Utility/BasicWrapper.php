@@ -4,12 +4,12 @@ namespace Fgms\EmailInquiriesBundle\Utility;
 
 trait BasicWrapper
 {
-    protected function raiseTypeMismatch($key, $expected, $actual)
+    public function raiseTypeMismatch($key, $expected, $actual)
 	{
 		throw new \LogicException('Type mismatch');
 	}
 
-	protected function raiseMissing($key)
+	public function raiseMissing($key)
 	{
 		throw new \LogicException('Missing');
 	}

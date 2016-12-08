@@ -110,6 +110,7 @@ class Form implements FormInterface
 
     public function submit(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $obj, \Fgms\EmailInquiriesBundle\Entity\Submission $submission)
     {
+        $obj = new ValueWrapper($obj);
         foreach ($this->fields as $field) $field->submit($obj,$submission);
         $msg = new \Swift_Message();
         $params = $this->form->getParams();

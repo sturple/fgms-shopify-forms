@@ -16,6 +16,17 @@ abstract class ValueWrapper
     }
 
     /**
+     * Retrieves the path to the value represented by
+     * this object.
+     *
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
      * Joins a string or integer key with the current path.
      *
      * @param string|int $key
@@ -41,7 +52,7 @@ abstract class ValueWrapper
      *
      * @param string|int $key
      */
-    protected abstract function raiseMissing($key);
+    public abstract function raiseMissing($key);
 
     /**
      * Called to raise an exception indicating that a certain
@@ -51,7 +62,7 @@ abstract class ValueWrapper
      * @param string $expected
      * @param mixed $actual
      */
-    protected abstract function raiseTypeMismatch($key, $expected, $actual);
+    public abstract function raiseTypeMismatch($key, $expected, $actual);
 
     /**
      * Checks to see if there's a value (including null)
@@ -63,7 +74,7 @@ abstract class ValueWrapper
      *
      * @return bool
      */
-    protected abstract function check($key, array $types);
+    public abstract function check($key, array $types);
 
     /**
      * Retrieves the value associated with a key, or
@@ -75,7 +86,7 @@ abstract class ValueWrapper
      *
      * @return mixed|null
      */
-    protected abstract function get($key, array $types);
+    public abstract function get($key, array $types);
 
     /**
      * Wraps an array in an ArrayWrapper.
@@ -84,7 +95,7 @@ abstract class ValueWrapper
      *
      * @return ArrayWrapper
      */
-    protected function wrapArray($key, array $value)
+    public function wrapArray($key, array $value)
     {
         return new BasicArrayWrapper($value,$this->join($key));
     }
@@ -96,7 +107,7 @@ abstract class ValueWrapper
      *
      * @return ObjectWrapper
      */
-    protected function wrapObject($key, $value)
+    public function wrapObject($key, $value)
     {
         return new BasicObjectWrapper($value,$this->join($key));
     }
@@ -110,7 +121,7 @@ abstract class ValueWrapper
      *
      * @return mixed
      */
-    protected function wrap($key, $value)
+    public function wrap($key, $value)
     {
         if (is_object($value)) return $this->wrapObject($key,$value);
         if (is_array($value)) return $this->wrapArray($key,$value);
