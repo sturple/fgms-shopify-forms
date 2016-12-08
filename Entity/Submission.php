@@ -68,7 +68,7 @@ class Submission
     private $form;
 
     /**
-     * @ORM\OneToMany(targetEntity="FieldSubmission",mappedBy="submission")
+     * @ORM\OneToMany(targetEntity="FieldSubmission",mappedBy="submission",cascade={"all"})
      */
     private $fieldSubmissions;
 
