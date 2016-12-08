@@ -39,6 +39,15 @@ class FormUrlEncodedTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('hello world',$arr[2]);
     }
 
+    public function testDecodePlus()
+    {
+        $obj = \Fgms\EmailInquiriesBundle\FormUrlEncoded\FormUrlEncoded::decode('foo=bar+baz');
+        $vars = get_object_vars($obj->unwrap());
+        $this->assertCount(1,$vars);
+        $this->assertArrayHasKey('foo',$vars);
+        $this->assertSame('bar baz',$obj->foo);
+    }
+
     public function testDecodeTypeMismatch()
     {
         $obj = \Fgms\EmailInquiriesBundle\FormUrlEncoded\FormUrlEncoded::decode('foo=bar&baz=quux&baz=corge&baz=hello%20world');

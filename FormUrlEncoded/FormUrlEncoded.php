@@ -29,8 +29,8 @@ class FormUrlEncoded
                 )
             );
             list($key,$value) = $kvp;
-            $key = rawurldecode($key);
-            $value = rawurldecode($value);
+            $key = urldecode($key);
+            $value = urldecode($value);
             if (!isset($retr->$key)) {
                 $retr->$key = $value;
                 continue;
