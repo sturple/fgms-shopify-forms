@@ -58,24 +58,24 @@ abstract class ValueWrapper
      * associated with a key.
      *
      * @param string|int $key
+     * @param array $types
+     *  The types being retrieved.
      *
      * @return bool
      */
-    protected abstract function check($key);
+    protected abstract function check($key, array $types);
 
     /**
      * Retrieves the value associated with a key, or
      * null if there is no such value.
      *
      * @param string|int $key
-     * @param string|null $type
-     *  The type being retrieved.  This is merely a hint
-     *  and may be null if no particular type is being
-     *  retrieved.
+     * @param array $types
+     *  The types being retrieved.
      *
      * @return mixed|null
      */
-    protected abstract function get($key, $type);
+    protected abstract function get($key, array $types);
 
     /**
      * Wraps an array in an ArrayWrapper.
@@ -131,45 +131,69 @@ abstract class ValueWrapper
      */
     public function __call($name, array $arguments)
     {
-        if (
-            (count($arguments) !== 1) ||
-            !(
-                is_string($arguments[0]) ||
-                is_integer($arguments[0])
-            )
-        ) throw new \BadMethodCallException(
+        if (count($arguments) !== 1) throw new \BadMethodCallException(
             'get[Optional]<types> accepts exactly one string or integer argument'
         );
-        $str = preg_replace('/^get/u','',$name,-1,$count);
-        if ($count === 0) sprintf('"%s" is not a valid get[Optional]<type> method',$name);
-        $str = preg_replace('/^Optional/u','',$str,-1,$count);
-        $opt = $count !== 0;
-        $num = preg_match_all('/\\G([[:upper:]][[:lower:]]*)(?:Or(?!$)|$)/u',$str,$matches);
+        return self::__callStatic($name,array_merge($arguments,[$this]));
+    }
+
+    private static function isOptional($str)
+    {
+        return !!preg_match('/^getOptional/u',$str);
+    }
+
+    private static function getTypes($str)
+    {
+        $num = preg_match_all('/(?:^get(?:Optional)?|(?<!^)\\G)([[:upper:]][[:lower:]]*)(?:Or(?!$)|$)/u',$str,$matches);
         if ($num === 0) throw new \BadMethodCallException('No types');
-        $key = $arguments[0];
-        if (!$this->check($key)) {
-            if ($opt) return null;
-            $this->raiseMissing($key);
-            throw new \LogicException('raiseMissing did not throw');
-        }
-        $types = array_map(function ($type) {
+        return array_map(function ($type) {
             $type = strtolower($type);
             if ($type === 'boolean') $type = 'bool';
             if ($type === 'integer') $type = 'int';
             return $type;
         },$matches[1]);
-        foreach ($types as $type) {
-            $func = 'is_' . $type;
-            if (!is_callable($func)) throw new \BadMethodCallException(
-                sprintf(
-                    '"%s" is not a recognized type',
-                    $type
-                )
-            );
-            $val = $this->get($key,$type);
-            if (call_user_func($func,$val)) return $this->wrap($key,$val);
+    }
+
+    private static function isType($val, $type)
+    {
+        $func = 'is_' . $type;
+        if (!is_callable($func)) throw new \BadMethodCallException(
+            sprintf(
+                '"%s" is not a recognized type',
+                $type
+            )
+        );
+        return call_user_func($func,$val);
+    }
+
+    public static function __callStatic($name, array $arguments)
+    {
+        if (
+            (count($arguments) < 2) ||
+            !(
+                is_string($arguments[0]) ||
+                is_integer($arguments[0])
+            )
+        ) throw new \BadMethodCallException(
+            'get[Optional]<types> accepts at least one string or integer argument followed by at least one ' . self::class . ' argument'
+        );
+        $opt = self::isOptional($name);
+        $types = self::getTypes($name);
+        $key = array_shift($arguments);
+        foreach ($arguments as $wrapper) if (!($wrapper instanceof self)) throw new \BadMethodCallException(
+            'All arguments beyond the first must be instance of ' . self::class
+        );
+        foreach ($arguments as $wrapper) {
+            if (!$wrapper->check($key,$types)) continue;
+            $val = $wrapper->get($key,$types);
+            foreach ($types as $type) {
+                if (self::isType($val,$type)) return $wrapper->wrap($key,$val);
+            }
+            $wrapper->raiseTypeMismatch($key,implode('|',$types),$val);
+            throw new \LogicException('raiseTypeMismatch did not throw');
         }
-        $this->raiseTypeMismatch($key,implode('|',$types),$this->get($key,null));
-        throw new \LogicException('raiseTypeMismatch did not throw');
+        if ($opt) return null;
+        $arguments[count($arguments) - 1]->raiseMissing($key);
+        throw new \LogicException('raiseMissing did not throw');
     }
 }
