@@ -101,6 +101,13 @@ class Form implements FormInterface
         return 'UTF-8';
     }
 
+    private function getTemplate()
+    {
+        $retr = $this->form->getParams()->getOptionalString('template');
+        if (!is_null($retr)) return $retr;
+        return 'FgmsEmailInquiriesBundle:Email:default.html.twig';
+    }
+
     public function submit(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $obj, \Fgms\EmailInquiriesBundle\Entity\Submission $submission)
     {
         foreach ($this->fields as $field) $field->submit($obj,$submission);
@@ -121,7 +128,7 @@ class Form implements FormInterface
             'submission' => $submission,
             'sections' => $sections
         ];
-        $template = $params->getString('template');
+        $template = $this->getTemplate();
         $body = $this->twig->render($template,$ctx);
         $msg->setBody($body)
             ->setContentType($this->getContentType($template));
