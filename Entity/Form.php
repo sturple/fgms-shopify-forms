@@ -18,7 +18,7 @@ class Form
     private $id;
 
     /**
-     * @ORM\Column(type="string",length=32)
+     * @ORM\Column(type="string",length=32,name="`key`")
      */
     private $key;
 
