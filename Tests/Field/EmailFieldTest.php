@@ -55,6 +55,31 @@ class EmailFieldTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($rt['foo@example.org']);
     }
 
+    public function testFilterMessageWithName()
+    {
+        $submission = new \Fgms\EmailInquiriesBundle\Entity\Submission();
+        $fs = new \Fgms\EmailInquiriesBundle\Entity\FieldSubmission();
+        $fs->setSubmission($submission)
+            ->setField($this->field->getField())
+            ->setValue((object)['email' => 'foo@example.org']);
+        $this->field->getField()->addFieldSubmission($fs);
+        $submission->addFieldSubmission($fs);
+        $name_field = new \Fgms\EmailInquiriesBundle\Entity\Field();
+        $name_field->setType('name');
+        $name_fs = new \Fgms\EmailInquiriesBundle\Entity\FieldSubmission();
+        $name_fs->setSubmission($submission)
+            ->setField($name_field)
+            ->setValue((object)['name' => 'Bar']);
+        $name_field->addFieldSubmission($name_fs);
+        $submission->addFieldSubmission($name_fs);
+        $msg = new \Swift_Message();
+        $this->field->filterMessage($msg,$submission);
+        $rt = $msg->getReplyTo();
+        $this->assertCount(1,$rt);
+        $this->assertArrayHasKey('foo@example.org',$rt);
+        $this->assertSame('Bar',$rt['foo@example.org']);
+    }
+
     public function testRender()
     {
         $submission = new \Fgms\EmailInquiriesBundle\Entity\Submission();

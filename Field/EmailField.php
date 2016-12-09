@@ -18,10 +18,23 @@ class EmailField extends TemplateField
             ->setValue((object)['email' => $email]);
     }
 
+    private function getNameFieldSubmission(\Fgms\EmailInquiriesBundle\Entity\Submission $submission)
+    {
+        foreach ($submission->getFieldSubmissions() as $fs) {
+            if ($fs->getField()->getType() === 'name') return $fs;
+        }
+        return null;
+    }
+
     public function filterMessage(\Swift_Message $message, \Fgms\EmailInquiriesBundle\Entity\Submission $submission)
     {
         $fs = $this->getFieldSubmission($submission);
-        $message->setReplyTo([$fs->getValue()->getString('email') => null]);
+        $name_fs = $this->getNameFieldSubmission($submission);
+        $name = null;
+        if (!is_null($name_fs)) $name = $name_fs->getValue()->getString('name');
+        $addr = $fs->getValue()->getString('email');
+        $reply_to = [$addr => $name];
+        $message->setReplyTo($reply_to);
     }
 
     public function render(\Fgms\EmailInquiriesBundle\Entity\Submission $submission)
