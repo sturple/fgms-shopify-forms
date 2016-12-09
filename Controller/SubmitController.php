@@ -74,6 +74,37 @@ class SubmitController extends BaseController
         );
     }
 
+    private function getTemplate(\Fgms\EmailInquiriesBundle\Entity\Submission $submission)
+    {
+        $form = $submission->getForm();
+        $params = $form->getParams();
+        return $params->getOptionalString('template');
+    }
+
+    private function getRedirectUrl(\Fgms\EmailInquiriesBundle\Entity\Submission $submission)
+    {
+        $form = $submission->getForm();
+        $params = $form->getParams();
+        return $params->getOptionalString('redirect');
+    }
+
+    private function getJsonResponse(\Fgms\EmailInquiriesBundle\Entity\Submission $submission)
+    {
+        $obj = new \stdClass();
+        $obj->redirect = $this->getRedirectUrl($submission);
+        return new \Symfony\Component\HttpFoundation\JsonResponse($obj);
+    }
+
+    private function getHtmlResponse(\Fgms\EmailInquiriesBundle\Entity\Submission $submission)
+    {
+        $redirect = $this->getRedirectUrl($submission);
+        if (!is_null($redirect)) return $this->redirect($redirect);
+        $template = $this->getTemplate($submission);
+        if (is_null($template)) $template = 'FgmsEmailInquiriesBundle:Submit:submit.html.twig';
+        $ctx = ['submission' => $submission];
+        return $this->render($template,$ctx);
+    }
+
     public function submitAction(\Symfony\Component\HttpFoundation\Request $request, $key)
     {
         $normalized = $this->normalize($request);
@@ -98,6 +129,7 @@ class SubmitController extends BaseController
         $em = $this->getEntityManager();
         $em->persist($submission);
         $em->flush();
-        return $this->render('FgmsEmailInquiriesBundle:Default:index.html.twig');
+        if ($this->isJson($request)) return $this->getJsonResponse($submission);
+        return $this->getHtmlResponse($submission);
     }
 }
