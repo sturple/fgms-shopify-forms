@@ -7,7 +7,7 @@ namespace Fgms\EmailInquiriesBundle\Field\Exception;
  * a Field entity with a type for which it is unable to
  * construct a domain object.
  */
-class UnrecognizedTypeException extends \InvalidArgumentException
+class UnrecognizedTypeException extends Exception
 {
     private $entity;
 

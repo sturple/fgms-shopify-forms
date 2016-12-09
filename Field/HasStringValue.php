@@ -8,9 +8,13 @@ namespace Fgms\EmailInquiriesBundle\Field;
  */
 trait HasStringValue
 {
+    private function getName()
+    {
+        return $this->getField()->getParams()->getString('name');
+    }
+
     private function getValue(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $obj)
     {
-        $name = $this->getField()->getParams()->getString('name');
-        return $obj->getString($name);
+        return $obj->getString($this->getName());
     }
 }
