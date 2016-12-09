@@ -6,25 +6,15 @@ namespace Fgms\EmailInquiriesBundle\Utility;
  * A base class for safe wrappers for arrays and
  * objects returned from untrusted sources.
  */
-abstract class ValueWrapper
+abstract class ValueWrapper implements \ArrayAccess, \IteratorAggregate, \Countable
 {
-    private $path;
-
-    public function __construct($path)
-    {
-        $this->path = $path;
-    }
-
     /**
      * Retrieves the path to the value represented by
      * this object.
      *
      * @return string
      */
-    public function getPath()
-    {
-        return $this->path;
-    }
+    public abstract function getPath();
 
     /**
      * Joins a string or integer key with the current path.
@@ -36,7 +26,27 @@ abstract class ValueWrapper
     public function join($key)
     {
         //  TODO: JSON Pointer escaping
-        return $this->path . '/' . $key;
+        return $this->getPath() . '/' . $key;
+    }
+
+    /**
+     * Determines if the wrapped value is an array.
+     *
+     * @return bool
+     */
+    public function isArray()
+    {
+        return is_array($this->unwrap());
+    }
+
+    /**
+     * Determines if the wrapped value is an object.
+     *
+     * @return bool
+     */
+    public function isObject()
+    {
+        return is_object($this->unwrap());
     }
 
     /**
@@ -70,51 +80,39 @@ abstract class ValueWrapper
      *
      * @param string|int $key
      * @param array $types
-     *  The types being retrieved.
+     *  The types being retrieved or null if no particular
+     *  type is being retrieved.
      *
      * @return bool
      */
-    public abstract function check($key, array $types);
+    public abstract function check($key, array $types = null);
 
     /**
      * Retrieves the value associated with a key, or
      * null if there is no such value.
      *
      * @param string|int $key
-     * @param array $types
-     *  The types being retrieved.
+     * @param array|null $types
+     *  The types being retrieved or null if no particular
+     *  type is being retrieved.
      *
      * @return mixed|null
      */
-    public abstract function get($key, array $types);
+    public abstract function get($key, array $types = null);
 
     /**
-     * Wraps an array in an ArrayWrapper.
+     * Wraps an object or array in a ValueWrapper.
      *
      * @param string|int $key
+     * @param array|object $value
      *
-     * @return ArrayWrapper
+     * @return ValueWrapper
      */
-    public function wrapArray($key, array $value)
-    {
-        return new BasicArrayWrapper($value,$this->join($key));
-    }
+    public abstract function wrapImpl($key, $value);
 
     /**
-     * Wraps an object in an ObjectWrapper.
-     *
-     * @param string|int $key
-     *
-     * @return ObjectWrapper
-     */
-    public function wrapObject($key, $value)
-    {
-        return new BasicObjectWrapper($value,$this->join($key));
-    }
-
-    /**
-     * Wraps a value in an ObjectWrapper or ArrayWrapper,
-     * or returns it unmodified as appropriate.
+     * Wraps a value in a ValueWrapper or returns it unmodified
+     * as appropriate.
      *
      * @param string|int $key
      * @param mixed $value
@@ -123,8 +121,7 @@ abstract class ValueWrapper
      */
     public function wrap($key, $value)
     {
-        if (is_object($value)) return $this->wrapObject($key,$value);
-        if (is_array($value)) return $this->wrapArray($key,$value);
+        if (is_object($value) || is_array($value)) return $this->wrapImpl($key,$value);
         return $value;
     }
 
@@ -206,5 +203,52 @@ abstract class ValueWrapper
         if ($opt) return null;
         $arguments[count($arguments) - 1]->raiseMissing($key);
         throw new \LogicException('raiseMissing did not throw');
+    }
+
+    public function __isset($key)
+    {
+        if (!$this->check($key)) return false;
+        if (is_null($this->get($key))) return false;
+        return true;
+    }
+
+    public function __get($key)
+    {
+        return $this->wrap($key,$this->get($key));
+    }
+
+    private function raiseImmutable()
+    {
+        throw new \LogicException('Immutable');
+    }
+
+    public function __unset($key)
+    {
+        $this->raiseImmutable();
+    }
+
+    public function __set($key, $value)
+    {
+        $this->raiseImmutable();
+    }
+
+    public function offsetExists($offset)
+    {
+        return $this->__isset($offset);
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->__get($offset);
+    }
+
+    public function offsetUnset($offset)
+    {
+        $this->__unset($offset);
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        $this->__set($offset,$value);
     }
 }

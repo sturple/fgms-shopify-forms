@@ -13,12 +13,12 @@ class FormUrlEncoded
      *
      * @param string $str
      *
-     * @return object
+     * @return ValueWrapper
      */
     public static function decode($str)
     {
         $retr = new \stdClass();
-        if ($str === '') return new ObjectWrapper($retr,$str);
+        if ($str === '') return new ValueWrapper($retr,$str);
         $split = explode('&',$str);
         foreach ($split as $entry) {
             $kvp = explode('=',$entry);
@@ -40,6 +40,6 @@ class FormUrlEncoded
             }
             $retr->$key[] = $value;
         }
-        return new ObjectWrapper($retr,$str);
+        return new ValueWrapper($retr,$str);
     }
 }

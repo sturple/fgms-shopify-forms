@@ -2,13 +2,28 @@
 
 namespace Fgms\EmailInquiriesBundle\Form;
 
-class ValueWrapper extends \Fgms\EmailInquiriesBundle\Utility\ValueWrapper
+class ValueWrapper extends \Fgms\EmailInquiriesBundle\Utility\ValueWrapperDecorator
 {
-    use Wrapper;
-
-    public function __construct(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $inner)
+    public function raiseMissing($key)
     {
-        parent::__construct($inner->getPath());
-        $this->inner = $inner;
+        try {
+            $this->getInner()->raiseMissing($key);
+        } catch (\Exception $ex) {
+            throw new Exception\MissingException($key,$ex);
+        }
+    }
+
+    public function raiseTypeMismatch($key, $expected, $actual)
+    {
+        try {
+            $this->getInner()->raiseTypeMismatch($key,$expected,$actual);
+        } catch (\Exception $ex) {
+            throw new Exception\TypeMismatchException($key,$expected,$actual,$ex);
+        }
+    }
+
+    public function wrapImpl($key, $value)
+    {
+        return new self($this->inner->wrapImpl($key,$value));
     }
 }

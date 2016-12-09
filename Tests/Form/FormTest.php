@@ -82,7 +82,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->setCreated(clone $dt)
             ->setReferer('http://google.ca');
         $form = $this->create();
-        $request = new \Fgms\EmailInquiriesBundle\Utility\BasicObjectWrapper(new \stdClass());
+        $request = new \Fgms\EmailInquiriesBundle\Utility\ValueWrapperImpl(new \stdClass());
         $form->submit($request,$submission);
         //  Verify sent emails
         $msgs = $this->swift->getMessages();
@@ -153,7 +153,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'template' => 'test.html.twig'
         ]);
         $this->twig->setTemplate('test.html.twig','');
-        $request = new \Fgms\EmailInquiriesBundle\Utility\BasicObjectWrapper(new \stdClass());
+        $request = new \Fgms\EmailInquiriesBundle\Utility\ValueWrapperImpl(new \stdClass());
         $form->submit($request,$submission);
         //  Verify content-type
         $msgs = $this->swift->getMessages();
@@ -172,7 +172,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'content_type' => 'foo'
         ]);
         $this->twig->setTemplate('test.html.twig','');
-        $request = new \Fgms\EmailInquiriesBundle\Utility\BasicObjectWrapper(new \stdClass());
+        $request = new \Fgms\EmailInquiriesBundle\Utility\ValueWrapperImpl(new \stdClass());
         $form->submit($request,$submission);
         //  Verify content-type
         $msgs = $this->swift->getMessages();
@@ -191,7 +191,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'charset' => 'ASCII'
         ]);
         $this->twig->setTemplate('test.html.twig','');
-        $request = new \Fgms\EmailInquiriesBundle\Utility\BasicObjectWrapper(new \stdClass());
+        $request = new \Fgms\EmailInquiriesBundle\Utility\ValueWrapperImpl(new \stdClass());
         $form->submit($request,$submission);
         //  Verify content-type
         $msgs = $this->swift->getMessages();

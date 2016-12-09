@@ -2,9 +2,15 @@
 
 namespace Fgms\EmailInquiriesBundle\FormUrlEncoded;
 
-trait Wrapper
+class ValueWrapper extends \Fgms\EmailInquiriesBundle\Utility\ValueWrapperImpl
 {
     private $raw;
+
+    public function __construct($obj, $raw, $path = '')
+    {
+        parent::__construct($obj,$path);
+        $this->raw = $raw;
+    }
 
     public function raiseMissing($key)
     {
@@ -24,13 +30,8 @@ trait Wrapper
         );
     }
 
-    public function wrapArray($key, array $value)
+    public function wrapImpl($key, $value)
     {
-        return new ArrayWrapper($value,$this->raw,$this->join($key));
-    }
-
-    public function wrapObject($key, $value)
-    {
-        return new ObjectWrapper($value,$this->raw,$this->join($key));
+        return new self($value,$this->raw,$this->join($key));
     }
 }

@@ -54,7 +54,7 @@ class Form implements FormInterface
         $params = $this->form->getParams();
         $value = $opt ? $params->getOptionalObjectOrStringOrArray($key) : $params->getObjectOrStringOrArray($key);
         if (is_null($value)) return [];
-        if (is_string($value) || ($value instanceof \Fgms\EmailInquiriesBundle\Utility\ObjectWrapper)) return $this->toEmail($value);
+        if (is_string($value) || $value->isObject()) return $this->toEmail($value);
         $c = count($value);
         if (!$opt && ($c === 0)) throw new \LogicException('No emails');
         $retr = [];

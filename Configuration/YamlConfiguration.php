@@ -18,7 +18,7 @@ class YamlConfiguration extends ValueWrapperConfiguration
             '',
             $str
         );
-        $wrapper = new \Fgms\EmailInquiriesBundle\Yaml\ObjectWrapper($yaml,$str);
+        $wrapper = new \Fgms\EmailInquiriesBundle\Yaml\ValueWrapper($yaml,$str);
         $this->setValueWrapper($wrapper);
     }
 }

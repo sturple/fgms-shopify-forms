@@ -7,7 +7,7 @@ class ValueWrapperConfigurationTest extends \PHPUnit_Framework_TestCase
     private function create($obj = null)
     {
         return new \Fgms\EmailInquiriesBundle\Configuration\MockValueWrapperConfiguration(
-            is_null($obj) ? null : new \Fgms\EmailInquiriesBundle\Utility\BasicObjectWrapper($obj)
+            is_null($obj) ? null : new \Fgms\EmailInquiriesBundle\Utility\ValueWrapperImpl($obj)
         );
     }
 

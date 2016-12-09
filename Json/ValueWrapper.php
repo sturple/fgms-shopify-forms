@@ -2,9 +2,15 @@
 
 namespace Fgms\EmailInquiriesBundle\Json;
 
-trait Wrapper
+class ValueWrapper extends \Fgms\EmailInquiriesBundle\Utility\ValueWrapperImpl
 {
     private $json;
+
+    public function __construct($obj, $json, $path = '')
+    {
+        parent::__construct($obj,$path);
+        $this->json = $json;
+    }
 
     public function raiseMissing($key)
     {
@@ -24,13 +30,8 @@ trait Wrapper
         );
     }
 
-    public function wrapArray($key, array $value)
+    public function wrapImpl($key, $value)
     {
-        return new ArrayWrapper($value,$this->json,$this->join($key));
-    }
-
-    public function wrapObject($key, $value)
-    {
-        return new ObjectWrapper($value,$this->json,$this->join($key));
+        return new self($value,$this->json,$this->join($key));
     }
 }

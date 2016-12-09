@@ -2,9 +2,15 @@
 
 namespace Fgms\EmailInquiriesBundle\Yaml;
 
-trait Wrapper
+class ValueWrapper extends \Fgms\EmailInquiriesBundle\Utility\ValueWrapperImpl
 {
     private $yaml;
+
+    public function __construct($obj, $yaml, $path = '')
+    {
+        parent::__construct($obj,$path);
+        $this->yaml = $yaml;
+    }
 
     public function raiseMissing($key)
     {

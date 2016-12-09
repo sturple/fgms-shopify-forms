@@ -39,17 +39,16 @@ class Json
     public static function decode($json, $depth = 512, $options = 0)
     {
         $retr = self::decodeRaw($json,false,$depth,$options);
-        if (is_array($retr)) return new ArrayWrapper($retr,$json);
-        if (is_object($retr)) return new ObjectWrapper($retr,$json);
+        if (is_array($retr) || is_object($retr)) return new ValueWrapper($retr,$json);
         return $retr;
     }
 
     public static function decodeArray($json, $depth = 512, $options = 0)
     {
         $retr = self::decode($json,$depth,$options);
-        if (!($retr instanceof ArrayWrapper)) throw new Exception\TypeMismatchException(
+        if (!(($retr instanceof ValueWrapper) && $retr->isArray())) throw new Exception\TypeMismatchException(
             'array',
-            $retr,
+            $retr->unwrap(),
             '',
             $json
         );
@@ -59,9 +58,10 @@ class Json
     public static function decodeObject($json, $depth = 512, $options = 0)
     {
         $retr = self::decode($json,$depth,$options);
-        if (!($retr instanceof ObjectWrapper)) throw new Exception\TypeMismatchException(
+        $unwrap = $retr->unwrap();
+        if (!(($retr instanceof ValueWrapper) && $retr->isObject())) throw new Exception\TypeMismatchException(
             'object',
-            $retr,
+            $retr->unwrap(),
             '',
             $json
         );
