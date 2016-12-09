@@ -125,6 +125,11 @@ class SubmitController extends BaseController
                 'Request data has unexpected type',
                 $ex
             );
+        } catch (\Fgms\EmailInquiriesBundle\Field\Exception\DataException $ex) {
+            throw $this->createBadRequestException(
+                'Request data violated field requirement',
+                $ex
+            );
         }
         $em = $this->getEntityManager();
         $em->persist($submission);
