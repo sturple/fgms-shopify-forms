@@ -28,7 +28,7 @@ class Form
     private $submissions;
 
     /**
-     * @ORM\OneToMany(targetEntity="Field",mappedBy="form")
+     * @ORM\OneToMany(targetEntity="Field",mappedBy="form",cascade={"all"})
      */
     private $fields;
 
