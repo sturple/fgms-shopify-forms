@@ -3,7 +3,7 @@
 namespace Fgms\EmailInquiriesBundle\Json\Exception;
 
 /**
- * Indicates that requestd datum was missing.
+ * Indicates that requested datum was missing.
  */
 class MissingException extends DataException
 {
