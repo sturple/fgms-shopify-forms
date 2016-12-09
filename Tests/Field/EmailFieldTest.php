@@ -48,11 +48,20 @@ class EmailFieldTest extends \PHPUnit_Framework_TestCase
         $this->field->getField()->addFieldSubmission($fs);
         $submission->addFieldSubmission($fs);
         $msg = new \Swift_Message();
+        $msg->setFrom(['bar@foo.com' => null]);
         $this->field->filterMessage($msg,$submission);
         $rt = $msg->getReplyTo();
         $this->assertCount(1,$rt);
         $this->assertArrayHasKey('foo@example.org',$rt);
         $this->assertNull($rt['foo@example.org']);
+        $from = $msg->getFrom();
+        $this->assertCount(1,$from);
+        $this->assertArrayHasKey('foo@example.org',$from);
+        $this->assertNull($rt['foo@example.org']);
+        $sender = $msg->getSender();
+        $this->assertCount(1,$sender);
+        $this->assertArrayHasKey('bar@foo.com',$sender);
+        $this->assertNull($sender['bar@foo.com']);
     }
 
     public function testFilterMessageWithName()
@@ -73,11 +82,20 @@ class EmailFieldTest extends \PHPUnit_Framework_TestCase
         $name_field->addFieldSubmission($name_fs);
         $submission->addFieldSubmission($name_fs);
         $msg = new \Swift_Message();
+        $msg->setFrom(['bar@foo.com' => null]);
         $this->field->filterMessage($msg,$submission);
         $rt = $msg->getReplyTo();
         $this->assertCount(1,$rt);
         $this->assertArrayHasKey('foo@example.org',$rt);
         $this->assertSame('Bar',$rt['foo@example.org']);
+        $from = $msg->getFrom();
+        $this->assertCount(1,$from);
+        $this->assertArrayHasKey('foo@example.org',$from);
+        $this->assertSame('Bar',$rt['foo@example.org']);
+        $sender = $msg->getSender();
+        $this->assertCount(1,$sender);
+        $this->assertArrayHasKey('bar@foo.com',$sender);
+        $this->assertNull($sender['bar@foo.com']);
     }
 
     public function testRender()

@@ -33,8 +33,11 @@ class EmailField extends TemplateField
         $name = null;
         if (!is_null($name_fs)) $name = $name_fs->getValue()->getString('name');
         $addr = $fs->getValue()->getString('email');
-        $reply_to = [$addr => $name];
-        $message->setReplyTo($reply_to);
+        $arr = [$addr => $name];
+        $from = $message->getFrom();
+        $message->setSender($from)
+            ->setReplyTo($arr)
+            ->setFrom($arr);
     }
 
     public function render(\Fgms\EmailInquiriesBundle\Entity\Submission $submission)
