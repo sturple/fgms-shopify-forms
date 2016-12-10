@@ -141,11 +141,24 @@ abstract class BaseController extends \Symfony\Bundle\FrameworkBundle\Controller
     {
         $name = $this->getStoreNameFromRequest($request);
         $repo = $this->getStoreRepository();
-        return $repo->findOneByName($name);
+        $retr = $repo->findOneByName($name);
+        if (is_null($retr)) throw $this->createNotFoundException(
+            sprintf(
+                'No Store entity with name "%s"',
+                $name
+            )
+        );
+        return $retr;
     }
 
     protected function getRouter()
     {
         return $this->container->get('router');
+    }
+
+    protected function getSubmissionRepository()
+    {
+        $doctrine = $this->getDoctrine();
+        return $doctrine->getRepository(\Fgms\EmailInquiriesBundle\Entity\Submission::class);
     }
 }

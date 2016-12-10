@@ -16,3 +16,8 @@ fgms_email_inquiries_homepage:
     path: /
     defaults:
         _controller: FgmsEmailInquiriesBundle:Default:home
+
+fgms_email_inquiries_csv:
+    path: /csv/{key}
+    defaults:
+        _controller: FgmsEmailInquiriesBundle:Default:csv
