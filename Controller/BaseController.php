@@ -61,7 +61,7 @@ abstract class BaseController extends \Symfony\Bundle\FrameworkBundle\Controller
         return $addr;
     }
 
-    private function createShopifyClientFromeStoreName($name)
+    private function createShopifyClientFromStoreName($name)
     {
         return new \Fgms\EmailInquiriesBundle\Shopify\Client(
             $this->getApiKey(),
@@ -75,7 +75,7 @@ abstract class BaseController extends \Symfony\Bundle\FrameworkBundle\Controller
         $retr = $this->getStoreAddressFromRequestRaw($request,true);
         if (is_null($retr)) return $this->getStoreAddressFromSession($request);
         //  Verify request
-        $shopify = $this->createShopifyClientFromeStoreName($this->getStoreName($retr));
+        $shopify = $this->createShopifyClientFromStoreName($this->getStoreName($retr));
         if (!$shopify->verify($request)) throw $this->createBadRequestException('Request does not verify');
         return $retr;
     }
@@ -125,7 +125,7 @@ abstract class BaseController extends \Symfony\Bundle\FrameworkBundle\Controller
 
     protected function getShopify(\Fgms\EmailInquiriesBundle\Entity\Store $store)
     {
-        $retr = $this->createShopifyClientFromeStoreName($store->getName());
+        $retr = $this->createShopifyClientFromStoreName($store->getName());
         $token = $store->getAccessToken();
         if (!is_null($token)) $retr->setToken($token);
         return $retr;
