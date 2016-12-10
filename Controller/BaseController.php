@@ -57,7 +57,6 @@ abstract class BaseController extends \Symfony\Bundle\FrameworkBundle\Controller
         $addr = $session->get('shop');
         if (is_null($addr)) throw $this->createBadRequestException('"shop" missing from session');
         if (!is_string($addr)) throw $this->createBadRequestException('"shop" not string in session');
-        $session->set('shop',$this->getStoreName($addr));
         return $addr;
     }
 
@@ -77,6 +76,8 @@ abstract class BaseController extends \Symfony\Bundle\FrameworkBundle\Controller
         //  Verify request
         $shopify = $this->createShopifyClientFromStoreName($this->getStoreName($retr));
         if (!$shopify->verify($request)) throw $this->createBadRequestException('Request does not verify');
+        $session = $request->getSession();
+        $session->set('shop',$this->getStoreName($retr));
         return $retr;
     }
 
