@@ -36,16 +36,13 @@ interface FormInterface
     public function getHeadings();
 
     /**
-     * Gets the rows of the report for this form.
+     * Gets a row of the report for this form.
      *
-     * @param Traversable|array $traversable
-     *  A traversable value which yields Submission
-     *  entities in the order they should be reported
-     *  on.
+     * @param Submission $submission
+     *  The Submission entity to generate the row for.
      *
-     * @return Traversable|array
-     *  A traversable value which yields arrays of strings
-     *  each of which represents a row of the report.
+     * @return array
+     *  An array of strings each of which is a column.
      */
-    public function getRows($traversable);
+    public function getRow(\Fgms\EmailInquiriesBundle\Entity\Submission $submission);
 }

@@ -165,18 +165,16 @@ class Form implements FormInterface
         return $dt->format($fmt);
     }
 
-    public function getRows($traversable)
+    public function getRow(\Fgms\EmailInquiriesBundle\Entity\Submission $submission)
     {
-        foreach ($traversable as $submission) {
-            $row = [
-                (string)$submission->getId(),
-                $this->toReportDateTime($submission->getCreated())
-            ];
-            foreach ($this->fields as $field) {
-                $columns = $field->getColumns($submission);
-                $row = array_merge($row,$columns);
-            }
-            yield $row;
+        $row = [
+            (string)$submission->getId(),
+            $this->toReportDateTime($submission->getCreated())
+        ];
+        foreach ($this->fields as $field) {
+            $columns = $field->getColumns($submission);
+            $row = array_merge($row,$columns);
         }
+        return $row;
     }
 }
