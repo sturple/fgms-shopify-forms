@@ -199,4 +199,88 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $msg = $msgs[0];
         $this->assertSame('ASCII',$msg->getCharset());
     }
+
+    public function testGetHeadings()
+    {
+        $field_entity_a = $this->createField(1,'foo',0);
+        $field_object_a = new \Fgms\EmailInquiriesBundle\Field\MockField($field_entity_a);
+        $field_object_a->setHeadings(['foo','bar']);
+        $this->factory->addField($field_object_a);
+        $this->form->addField($field_entity_a);
+        $field_entity_b = $this->createField(2,'bar',1);
+        $field_object_b = new \Fgms\EmailInquiriesBundle\Field\MockField($field_entity_b);
+        $field_object_b->setHeadings(['corge']);
+        $this->factory->addField($field_object_b);
+        $this->form->addField($field_entity_b);
+        $form = $this->create();
+        $arr = $form->getHeadings();
+        $this->assertCount(5,$arr);
+        $this->assertArrayHasKey(0,$arr);
+        $this->assertSame('ID',$arr[0]);
+        $this->assertArrayHasKey(1,$arr);
+        $this->assertSame('Date & Time',$arr[1]);
+        $this->assertArrayHasKey(2,$arr);
+        $this->assertSame('foo',$arr[2]);
+        $this->assertArrayHasKey(3,$arr);
+        $this->assertSame('bar',$arr[3]);
+        $this->assertArrayHasKey(4,$arr);
+        $this->assertSame('corge',$arr[4]);
+    }
+
+    public function testGetRows()
+    {
+        $field_entity_a = $this->createField(1,'foo',0);
+        $field_object_a = new \Fgms\EmailInquiriesBundle\Field\MockField($field_entity_a);
+        $field_object_a->addRow(['foo','bar'])->addRow(['quux','baz']);
+        $this->factory->addField($field_object_a);
+        $this->form->addField($field_entity_a);
+        $field_entity_b = $this->createField(2,'bar',1);
+        $field_object_b = new \Fgms\EmailInquiriesBundle\Field\MockField($field_entity_b);
+        $field_object_b->addRow(['corge'])->addRow(['hello world']);
+        $this->factory->addField($field_object_b);
+        $this->form->addField($field_entity_b);
+        $form = $this->create();
+        $submission = new \Fgms\EmailInquiriesBundle\Entity\Submission();
+        $rc = new \ReflectionClass($submission);
+        $prop = $rc->getProperty('id');
+        $prop->setAccessible(true);
+        $prop->setValue($submission,6);
+        $submission->setCreated(\DateTime::createFromFormat('U','0'));
+        $submissions = [$submission];
+        $submission = new \Fgms\EmailInquiriesBundle\Entity\Submission();
+        $prop->setValue($submission,3);
+        $submission->setCreated(\DateTime::createFromFormat('U','1',new \DateTimeZone('America/Vancouver')));
+        $submissions[] = $submission;
+        $i = $form->getRows($submissions);
+        $i->rewind();
+        $this->assertTrue($i->valid());
+        $row = $i->current();
+        $this->assertCount(5,$row);
+        $this->assertArrayHasKey(0,$row);
+        $this->assertSame('6',$row[0]);
+        $this->assertArrayHasKey(1,$row);
+        $this->assertSame('Jan 1, 1970 12:00:00 AM UTC',$row[1]);
+        $this->assertArrayHasKey(2,$row);
+        $this->assertSame('foo',$row[2]);
+        $this->assertArrayHasKey(3,$row);
+        $this->assertSame('bar',$row[3]);
+        $this->assertArrayHasKey(4,$row);
+        $this->assertSame('corge',$row[4]);
+        $i->next();
+        $this->assertTrue($i->valid());
+        $row = $i->current();
+        $this->assertCount(5,$row);
+        $this->assertArrayHasKey(0,$row);
+        $this->assertSame('3',$row[0]);
+        $this->assertArrayHasKey(1,$row);
+        $this->assertSame('Jan 1, 1970 12:00:01 AM UTC',$row[1]);
+        $this->assertArrayHasKey(2,$row);
+        $this->assertSame('quux',$row[2]);
+        $this->assertArrayHasKey(3,$row);
+        $this->assertSame('baz',$row[3]);
+        $this->assertArrayHasKey(4,$row);
+        $this->assertSame('hello world',$row[4]);
+        $i->next();
+        $this->assertFalse($i->valid());
+    }
 }

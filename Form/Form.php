@@ -144,4 +144,39 @@ class Form implements FormInterface
         $this->swift->send($msg);
         $this->toSubmission($msg,$submission);
     }
+
+    public function getHeadings()
+    {
+        $arr = ['ID','Date & Time'];
+        foreach ($this->fields as $field) {
+            $headings = $field->getHeadings();
+            $arr = array_merge($arr,$headings);
+        }
+        return $arr;
+    }
+
+    private function toReportDateTime(\DateTime $dt)
+    {
+        $dt = clone $dt;
+        //  TODO: Configurable timezone
+        $dt->setTimezone(new \DateTimeZone('UTC'));
+        //  TODO: Configurable format
+        $fmt = 'M j, Y g:i:s A e';
+        return $dt->format($fmt);
+    }
+
+    public function getRows($traversable)
+    {
+        foreach ($traversable as $submission) {
+            $row = [
+                (string)$submission->getId(),
+                $this->toReportDateTime($submission->getCreated())
+            ];
+            foreach ($this->fields as $field) {
+                $columns = $field->getColumns($submission);
+                $row = array_merge($row,$columns);
+            }
+            yield $row;
+        }
+    }
 }

@@ -8,10 +8,25 @@ class MockField extends Field
     private $submission;
     private $wrapper;
     private $message;
+    private $headings;
+    private $rows = [];
+
+    public function addRow(array $row)
+    {
+        $this->rows[] = $row;
+        return $this;
+    }
+
+    public function setHeadings(array $headings)
+    {
+        $this->headings = $headings;
+        return $this;
+    }
 
     public function setRender(array $render)
     {
         $this->render = $render;
+        return $this;
     }
 
     public function submit(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $obj, \Fgms\EmailInquiriesBundle\Entity\Submission $submission)
@@ -58,5 +73,19 @@ class MockField extends Field
     {
         if (is_null($this->message)) throw new \LogicException('filterMessage not invoked');
         return $this->message;
+    }
+
+    public function getHeadings()
+    {
+        if (is_null($this->headings)) throw new \LogicException('getHeadings invoked again');
+        $retr = $this->headings;
+        $this->headings = null;
+        return $retr;
+    }
+
+    public function getColumns(\Fgms\EmailInquiriesBundle\Entity\Submission $submission)
+    {
+        if (count($this->rows) === 0) throw new \LogicException('No rows');
+        return array_shift($this->rows);
     }
 }

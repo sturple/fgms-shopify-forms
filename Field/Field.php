@@ -38,6 +38,16 @@ abstract class Field implements FieldInterface
     {
     }
 
+    public function getHeadings()
+    {
+        return [];
+    }
+
+    public function getColumns(\Fgms\EmailInquiriesBundle\Entity\Submission $submission)
+    {
+        return [];
+    }
+
     /**
      * Obtains a FieldSubmission entity for the wrapped
      * Form entity and the provided Submission entity.

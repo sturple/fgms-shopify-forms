@@ -49,4 +49,25 @@ interface FieldInterface
      *  The Submission entity associated with this submission.
      */
     public function filterMessage(\Swift_Message $message, \Fgms\EmailInquiriesBundle\Entity\Submission $submission);
+
+    /**
+     * Gets the headings of the columns this field generates
+     * in reports.
+     *
+     * @return array
+     *  An array of strings representing the headings.
+     */
+    public function getHeadings();
+
+    /**
+     * Gets the values of the columns this field generates
+     * in reports for a certain submission.
+     *
+     * @param Submission $submission
+     *  Must not be mutated.
+     *
+     * @return array
+     *  An array of strings representing the headings.
+     */
+    public function getColumns(\Fgms\EmailInquiriesBundle\Entity\Submission $submission);
 }
