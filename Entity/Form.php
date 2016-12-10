@@ -38,6 +38,11 @@ class Form
     private $params = '{}';
 
     /**
+     * @ORM\ManyToOne(targetEntity="Store",inversedBy="forms")
+     */
+    private $store;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -170,5 +175,29 @@ class Form
     public function getParams()
     {
         return \Fgms\EmailInquiriesBundle\Json\Json::decodeObject($this->params);
+    }
+
+    /**
+     * Set store
+     *
+     * @param \Fgms\EmailInquiriesBundle\Entity\Store $store
+     *
+     * @return Form
+     */
+    public function setStore(\Fgms\EmailInquiriesBundle\Entity\Store $store = null)
+    {
+        $this->store = $store;
+
+        return $this;
+    }
+
+    /**
+     * Get store
+     *
+     * @return \Fgms\EmailInquiriesBundle\Entity\Store
+     */
+    public function getStore()
+    {
+        return $this->store;
     }
 }
