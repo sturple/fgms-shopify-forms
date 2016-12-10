@@ -10,21 +10,4 @@ namespace Fgms\EmailInquiriesBundle\Repository;
  */
 class StoreRepository extends \Doctrine\ORM\EntityRepository
 {
-	/**
-	 * Obtains the Store entity with a certain name.
-	 *
-	 * @param string $name
-	 *
-	 * @return Store|null
-	 */
-	public function getByName($name)
-	{
-		$qb = $this->createQueryBuilder('s');
-		$qb->andWhere($qb->expr()->eq('s.name',':name'))
-			->setParameter('name',$name);
-		$q = $qb->getQuery();
-		$arr = $q->getResult();
-		if (count($arr) !== 1) return null;
-		return $arr[0];
-	}
 }
