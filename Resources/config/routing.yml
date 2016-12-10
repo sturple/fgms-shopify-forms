@@ -1,3 +1,18 @@
 fgms_email_inquiries_submit:
     path: /submit/{key}
     defaults: { _controller: FgmsEmailInquiriesBundle:Submit:submit }
+
+fgms_email_inquiries_install:
+    path: /install
+    defaults:
+        _controller: FgmsEmailInquiriesBundle:Install:install
+
+fgms_email_inquiries_auth:
+    path: /auth
+    defaults:
+        _controller: FgmsEmailInquiriesBundle:Install:auth
+
+fgms_email_inquiries_homepage:
+    path: /
+    defaults:
+        _controller: FgmsEmailInquiriesBundle:Default:home
