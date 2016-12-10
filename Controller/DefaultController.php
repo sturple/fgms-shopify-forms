@@ -4,9 +4,15 @@ namespace Fgms\EmailInquiriesBundle\Controller;
 
 class DefaultController extends BaseController
 {
-    public function homeAction()
+    public function homeAction(\Symfony\Component\HttpFoundation\Request $request)
     {
-        throw new \LogicException('Not implemented');
+        $store = $this->getStoreFromRequest($request);
+        //  TODO: Some kind of sorting for the forms?
+        $ctx = [
+            'api_key' => $this->getApiKey(),    //  TODO: Creating this default context should really be its own method
+            'store' => $store
+        ];
+        return $this->render('FgmsEmailInquiriesBundle:Default:index.html.twig',$ctx);
     }
 
     public function csvAction(\Symfony\Component\HttpFoundation\Request $request, $key)

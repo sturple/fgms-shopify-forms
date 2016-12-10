@@ -1,0 +1,21 @@
+{% extends 'FgmsEmailInquiriesBundle:Default:base.html.twig' %}
+{% set title = 'Home' %}
+
+{% block content %}
+<table class="table">
+	<thead>
+		<tr>
+			<th>Key</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for form in store.forms %}
+		<tr>
+			<td>{{form.key}}</td>
+			<td><a class="btn btn-primary" href="{{url('fgms_email_inquiries_csv',{key: form.key})|escape('html_attr')}}">Download CSV</a></td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endblock %}
