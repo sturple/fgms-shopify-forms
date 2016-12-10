@@ -2,6 +2,6 @@
 
 namespace Fgms\EmailInquiriesBundle\Repository;
 
-class SubmissinRepository extends \Doctrine\ORM\EntityRepository
+class SubmissionRepository extends \Doctrine\ORM\EntityRepository
 {
 }
