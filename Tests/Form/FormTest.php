@@ -214,6 +214,19 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('ASCII',$msg->getCharset());
     }
 
+    public function testGetEmailEmailDisabled()
+    {
+        $submission = new \Fgms\EmailInquiriesBundle\Entity\Submission();
+        $submission->setIp('127.0.0.1')
+            ->setCreated(new \DateTime())
+            ->setReferer('http://google.ca');
+        $form = $this->create([
+            'email_enabled' => false
+        ]);
+        $msg = $form->getEmail($submission);
+        $this->assertNull($msg);
+    }
+
     public function testGetHeadings()
     {
         $field_entity_a = $this->createField(1,'foo',0);

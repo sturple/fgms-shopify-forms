@@ -115,8 +115,17 @@ class Form implements FormInterface
         foreach ($this->fields as $field) $field->submit($obj,$submission);
     }
 
+    private function getEmailEnabled()
+    {
+        $retr = $this->form->getParams()->getOptionalBoolean('email_enabled');
+        //  The default is to send email
+        if (is_null($retr)) return true;
+        return $retr;
+    }
+
     public function getEmail(\Fgms\EmailInquiriesBundle\Entity\Submission $submission)
     {
+        if (!$this->getEmailEnabled()) return null;
         $msg = new \Swift_Message();
         $params = $this->form->getParams();
         $msg->setFrom($this->getEmails('from'))
