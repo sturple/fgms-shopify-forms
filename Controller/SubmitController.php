@@ -113,6 +113,7 @@ class SubmitController extends BaseController
         $submission->setIp($request->getClientIp())
             ->setCreated(new \DateTime())
             ->setReferer($request->headers->get('referer'));
+        //  Submit data and save Submission entity
         try {
             $form->submit($normalized,$submission);
         } catch (\Fgms\EmailInquiriesBundle\Form\Exception\MissingException $ex) {
@@ -134,6 +135,16 @@ class SubmitController extends BaseController
         $em = $this->getEntityManager();
         $em->persist($submission);
         $em->flush();
+        //  Send email (if applicable) and re-save Submission entity
+        //  (in case an Email entity was attached)
+        $msg = $form->getEmail($submission);
+        if (!is_null($msg)) {
+            $swift = $this->getSwift();
+            $swift->send($msg);
+        }
+        $em->persist($submission);
+        $em->flush();
+        //  Send response
         if ($this->isJson($request)) return $this->getJsonResponse($submission);
         return $this->getHtmlResponse($submission);
     }

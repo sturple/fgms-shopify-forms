@@ -4,7 +4,6 @@ namespace Fgms\EmailInquiriesBundle\Tests\Form;
 
 class FormTest extends \PHPUnit_Framework_TestCase
 {
-    private $swift;
     private $form;
     private $factory;
     private $twig;
@@ -12,7 +11,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->form = new \Fgms\EmailInquiriesBundle\Entity\Form();
-        $this->swift = new \Fgms\EmailInquiriesBundle\Swift\MockTransport();
         $this->factory = new \Fgms\EmailInquiriesBundle\Field\MockFieldFactory();
         $this->twig = new \Twig_Loader_Array([
             'test.txt.twig' => '{% for section in sections %}{{section|raw}}{% endfor %}'
@@ -49,12 +47,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'template' => 'test.txt.twig'
         ],$params);
         $this->form->setParams((object)$params);
-        $swift = \Swift_Mailer::newInstance($this->swift);
         $twig = new \Twig_Environment($this->twig);
         return new \Fgms\EmailInquiriesBundle\Form\Form(
             $this->form,
             $this->factory,
-            $swift,
             $twig
         );
     }
@@ -84,10 +80,48 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $form = $this->create();
         $request = new \Fgms\EmailInquiriesBundle\Utility\ValueWrapperImpl(new \stdClass());
         $form->submit($request,$submission);
-        //  Verify sent emails
-        $msgs = $this->swift->getMessages();
-        $this->assertCount(1,$msgs);
-        $msg = $msgs[0];
+        //  Verify Submission entity
+        $this->assertSame('127.0.0.1',$submission->getIp());
+        $this->assertSame($dt->getTimestamp(),$submission->getCreated()->getTimestamp());
+        $this->assertSame('http://google.ca',$submission->getReferer());
+        $this->assertSame($this->form,$submission->getForm());
+        $this->assertNull($submission->getEmail());
+        //  Verify interaction with MockField objects
+        $this->assertFalse($field_object_a->isRendered());
+        $this->assertFalse($field_object_b->isRendered());
+        $this->assertSame($request->unwrap(),$field_object_a->getRequest()->unwrap());
+        $this->assertSame($request->unwrap(),$field_object_b->getRequest()->unwrap());
+        $this->assertSame($submission,$field_object_a->getSubmission());
+        $this->assertSame($submission,$field_object_b->getSubmission());
+        return;
+    }
+
+    public function testGetEmail()
+    {
+        $field_entity_a = $this->createField(1,'foo',1);
+        $field_object_a = new \Fgms\EmailInquiriesBundle\Field\MockField($field_entity_a);
+        $field_object_a->setRender([
+            'foo',
+            'bar'
+        ]);
+        $this->factory->addField($field_object_a);
+        $this->form->addField($field_entity_a);
+        $field_entity_b = $this->createField(2,'bar',0);
+        $field_object_b = new \Fgms\EmailInquiriesBundle\Field\MockField($field_entity_b);
+        $field_object_b->setRender([
+            'corge'
+        ]);
+        $this->factory->addField($field_object_b);
+        $this->form->addField($field_entity_b);
+        $submission = new \Fgms\EmailInquiriesBundle\Entity\Submission();
+        $dt = new \DateTime();
+        $submission->setIp('127.0.0.1')
+            ->setCreated(clone $dt)
+            ->setReferer('http://google.ca');
+        $form = $this->create();
+        $msg = $form->getEmail($submission);
+        $this->assertNotNull($msg);
+        //  Verify Swift_Message
         $from = $msg->getFrom();
         $this->assertCount(1,$from);
         $this->assertArrayHasKey('rleahy@fifthgeardev.com',$from);
@@ -106,11 +140,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('text/plain',$msg->getContentType());
         $body = 'corgefoobar';
         $this->assertSame($body,$msg->getBody());
-        //  Verify Submission entity
-        $this->assertSame('127.0.0.1',$submission->getIp());
-        $this->assertSame($dt->getTimestamp(),$submission->getCreated()->getTimestamp());
-        $this->assertSame('http://google.ca',$submission->getReferer());
-        $this->assertSame($this->form,$submission->getForm());
+        //  Verify Email entity
         $email = $submission->getEmail();
         $this->assertNotNull($email);
         $from = $email->getFrom();
@@ -134,18 +164,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('',$email->getSubject());
         $this->assertSame($body,$email->getBody());
         $this->assertNotEmpty($email->getHeaders());
-        //  Verify interaction with MockField objects
-        $this->assertTrue($field_object_a->isRendered());
-        $this->assertTrue($field_object_b->isRendered());
-        $this->assertSame($request->unwrap(),$field_object_a->getRequest()->unwrap());
-        $this->assertSame($request->unwrap(),$field_object_b->getRequest()->unwrap());
-        $this->assertSame($submission,$field_object_a->getSubmission());
-        $this->assertSame($submission,$field_object_b->getSubmission());
-        $this->assertSame($msg,$field_object_a->getMessage());
-        $this->assertSame($msg,$field_object_b->getMessage());
     }
 
-    public function testSubmitContentTypeDetectHtml()
+    public function testGetEmailContentTypeDetectHtml()
     {
         $submission = new \Fgms\EmailInquiriesBundle\Entity\Submission();
         $submission->setIp('127.0.0.1')
@@ -155,16 +176,13 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'template' => 'test.html.twig'
         ]);
         $this->twig->setTemplate('test.html.twig','');
-        $request = new \Fgms\EmailInquiriesBundle\Utility\ValueWrapperImpl(new \stdClass());
-        $form->submit($request,$submission);
+        $msg = $form->getEmail($submission);
+        $this->assertNotNull($msg);
         //  Verify content-type
-        $msgs = $this->swift->getMessages();
-        $this->assertCount(1,$msgs);
-        $msg = $msgs[0];
         $this->assertSame('text/html',$msg->getContentType());
     }
 
-    public function testSubmitContentType()
+    public function testGetEmailContentType()
     {
         $submission = new \Fgms\EmailInquiriesBundle\Entity\Submission();
         $submission->setIp('127.0.0.1')
@@ -174,16 +192,13 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'content_type' => 'foo'
         ]);
         $this->twig->setTemplate('test.html.twig','');
-        $request = new \Fgms\EmailInquiriesBundle\Utility\ValueWrapperImpl(new \stdClass());
-        $form->submit($request,$submission);
+        $msg = $form->getEmail($submission);
+        $this->assertNotNull($msg);
         //  Verify content-type
-        $msgs = $this->swift->getMessages();
-        $this->assertCount(1,$msgs);
-        $msg = $msgs[0];
         $this->assertSame('foo',$msg->getContentType());
     }
 
-    public function testSubmitCharset()
+    public function testGetEmailCharset()
     {
         $submission = new \Fgms\EmailInquiriesBundle\Entity\Submission();
         $submission->setIp('127.0.0.1')
@@ -193,12 +208,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'charset' => 'ASCII'
         ]);
         $this->twig->setTemplate('test.html.twig','');
-        $request = new \Fgms\EmailInquiriesBundle\Utility\ValueWrapperImpl(new \stdClass());
-        $form->submit($request,$submission);
+        $msg = $form->getEmail($submission);
+        $this->assertNotNull($msg);
         //  Verify content-type
-        $msgs = $this->swift->getMessages();
-        $this->assertCount(1,$msgs);
-        $msg = $msgs[0];
         $this->assertSame('ASCII',$msg->getCharset());
     }
 

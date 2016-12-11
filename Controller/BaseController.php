@@ -39,10 +39,9 @@ abstract class BaseController extends \Symfony\Bundle\FrameworkBundle\Controller
         );
         //  Gather dependencies and create Form domain
         //  object
-        $swift = $this->container->get('swiftmailer.mailer');
         $twig = $this->getTwigEnvironment();
         $factory = $this->getFieldFactory();
-        return new \Fgms\EmailInquiriesBundle\Form\Form($form,$factory,$swift,$twig);
+        return new \Fgms\EmailInquiriesBundle\Form\Form($form,$factory,$twig);
     }
 
     protected function getEntityManager()
@@ -161,5 +160,10 @@ abstract class BaseController extends \Symfony\Bundle\FrameworkBundle\Controller
     {
         $doctrine = $this->getDoctrine();
         return $doctrine->getRepository(\Fgms\EmailInquiriesBundle\Entity\Submission::class);
+    }
+
+    protected function getSwift()
+    {
+        return $this->container->get('swiftmailer.mailer');
     }
 }

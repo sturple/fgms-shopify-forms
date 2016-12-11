@@ -27,6 +27,18 @@ interface FormInterface
     public function submit(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $obj, \Fgms\EmailInquiriesBundle\Entity\Submission $submission);
 
     /**
+     * Creates a Swift_Message for a submission if applicable.
+     *
+     * @param Submission $submission
+     *  A Submission entity representing the submission.  An
+     *  Email entity should be attached to this entity by this
+     *  method if a Swift_Message is returned.
+     *
+     * @return Swift_Message|null
+     */
+    public function getEmail(\Fgms\EmailInquiriesBundle\Entity\Submission $submission);
+
+    /**
      * Retrieves the heading row of the report for this
      * form.
      *

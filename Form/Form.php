@@ -7,7 +7,6 @@ namespace Fgms\EmailInquiriesBundle\Form;
  */
 class Form implements FormInterface
 {
-    private $swift;
     private $twig;
     private $form;
     private $fields;
@@ -21,13 +20,10 @@ class Form implements FormInterface
      * @param FieldFactoryInterface $factory
      *  A factory object which shall be used to create
      *  Field objects from Field entities.
-     * @param Swift_Mailer $swift
-     *  The mailer which shall be used to send emails.
      */
-    public function __construct(\Fgms\EmailInquiriesBundle\Entity\Form $form, \Fgms\EmailInquiriesBundle\Field\FieldFactoryInterface $factory, \Swift_Mailer $swift, \Twig_Environment $twig)
+    public function __construct(\Fgms\EmailInquiriesBundle\Entity\Form $form, \Fgms\EmailInquiriesBundle\Field\FieldFactoryInterface $factory, \Twig_Environment $twig)
     {
         $this->form = $form;
-        $this->swift = $swift;
         $this->twig = $twig;
         $this->fields = [];
         foreach ($this->form->getFields() as $field) {
@@ -117,6 +113,10 @@ class Form implements FormInterface
         $submission->setForm($this->form);
         $obj = new ValueWrapper($obj);
         foreach ($this->fields as $field) $field->submit($obj,$submission);
+    }
+
+    public function getEmail(\Fgms\EmailInquiriesBundle\Entity\Submission $submission)
+    {
         $msg = new \Swift_Message();
         $params = $this->form->getParams();
         $msg->setFrom($this->getEmails('from'))
@@ -143,10 +143,12 @@ class Form implements FormInterface
         foreach ($this->fields as $field) {
             $field->filterMessage($msg,$submission);
         }
-        $this->swift->send($msg);
+        //  TODO: Avoid overwriting an existing email if this method
+        //  is being called just to resend?
         $email = $this->createEmail($msg);
         $submission->setEmail($email);
         $email->setSubmission($submission);
+        return $msg;
     }
 
     public function getHeadings()
