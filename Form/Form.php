@@ -75,18 +75,19 @@ class Form implements FormInterface
         return $retr;
     }
 
-    private function toSubmission(\Swift_Message $msg, \Fgms\EmailInquiriesBundle\Entity\Submission $submission)
+    private function createEmail(\Swift_Message $msg)
     {
-        $submission->setTo($this->toArray($msg->getTo()))
+        $retr = new \Fgms\EmailInquiriesBundle\Entity\Email();
+        $retr->setTo($this->toArray($msg->getTo()))
             ->setSubject($msg->getSubject())
             ->setBody((string)$msg->getBody())
-            ->setForm($this->form)
             ->setFrom($this->toArray($msg->getFrom()))
             ->setSender($this->toArray($msg->getSender()))
             ->setReplyTo($this->toArray($msg->getReplyTo()))
             ->setCc($this->toArray($msg->getCc()))
             ->setBcc($this->toArray($msg->getBcc()))
             ->setHeaders((string)$msg->getHeaders());
+        return $retr;
     }
 
     private function getContentType($template)
@@ -113,6 +114,7 @@ class Form implements FormInterface
 
     public function submit(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $obj, \Fgms\EmailInquiriesBundle\Entity\Submission $submission)
     {
+        $submission->setForm($this->form);
         $obj = new ValueWrapper($obj);
         foreach ($this->fields as $field) $field->submit($obj,$submission);
         $msg = new \Swift_Message();
@@ -142,7 +144,9 @@ class Form implements FormInterface
             $field->filterMessage($msg,$submission);
         }
         $this->swift->send($msg);
-        $this->toSubmission($msg,$submission);
+        $email = $this->createEmail($msg);
+        $submission->setEmail($email);
+        $email->setSubmission($submission);
     }
 
     public function getHeadings()
