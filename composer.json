@@ -1,6 +1,27 @@
 {
+    "name": "sturple/fgms-shopify-forms",
+    "description": "Shopify Forms Bundle (Embed)",
+    "type": "symfony-bundle",
+    "keywords": ["shopify", "oauth","embed", "symfony","forms"],
+    "homepage": "https://github.com/sturple/fgms-shopify-forms",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Shawn Turple",
+            "email": "shawn@turple.ca"
+        },
+        {
+            "name": "Robert Leahy",
+            "email": "rleahy@rleahy.ca"
+        }
+    ],
     "require": {
         "guzzlehttp/guzzle": "6.2",
         "league/csv": "8.0"
+    },
+    "minimum-stability": "dev",
+    "target-dir": "Fgms/EmailInquiriesBundle",
+    "autoload" : {
+        "psr-0" : {"Fgms\\EmailInquiriesBundle" : ""}
     }
 }
