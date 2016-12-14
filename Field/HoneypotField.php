@@ -13,7 +13,7 @@ class HoneypotField extends Field
 {
     use HasStringValue;
 
-    public function submit(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $obj, \Fgms\EmailInquiriesBundle\Entity\Submission $submission)
+    public function submit(\Fgms\ValueWrapper\ValueWrapper $obj, \Fgms\EmailInquiriesBundle\Entity\Submission $submission)
     {
         $value = $this->getValue($obj);
         if ($value !== '') throw new Exception\HoneypotException(

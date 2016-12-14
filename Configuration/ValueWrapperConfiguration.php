@@ -28,7 +28,7 @@ abstract class ValueWrapperConfiguration extends Configuration
      *
      * @param ValueWrapper $wrapper
      */
-    protected function setValueWrapper(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $wrapper)
+    protected function setValueWrapper(\Fgms\ValueWrapper\ValueWrapper $wrapper)
     {
         $this->root = $wrapper;
     }
@@ -61,14 +61,14 @@ abstract class ValueWrapperConfiguration extends Configuration
         return $form;
     }
 
-    private function getParams(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $wrapper)
+    private function getParams(\Fgms\ValueWrapper\ValueWrapper $wrapper)
     {
         $retr = $wrapper->getOptionalObject('params');
         if (is_null($retr)) return new \stdClass();
         return $retr->unwrap();
     }
 
-    private function createField(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $wrapper, \Fgms\EmailInquiriesBundle\Entity\Form $form)
+    private function createField(\Fgms\ValueWrapper\ValueWrapper $wrapper, \Fgms\EmailInquiriesBundle\Entity\Form $form)
     {
         $retr = new \Fgms\EmailInquiriesBundle\Entity\Field();
         $retr->setForm($form)

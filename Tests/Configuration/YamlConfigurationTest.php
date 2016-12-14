@@ -19,7 +19,7 @@ class YamlConfigurationTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadNonObject()
     {
-        $this->expectException(\Fgms\EmailInquiriesBundle\Yaml\Exception\TypeMismatchException::class);
+        $this->expectException(\Fgms\Yaml\Exception\TypeMismatchException::class);
         $this->config->load('foo');
     }
 }

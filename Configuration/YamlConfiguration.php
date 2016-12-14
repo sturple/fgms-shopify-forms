@@ -12,13 +12,13 @@ class YamlConfiguration extends ValueWrapperConfiguration
     {
         $this->unsetValueWrapper();
         $yaml = \Symfony\Component\Yaml\Yaml::parse($str,\Symfony\Component\Yaml\Yaml::PARSE_OBJECT_FOR_MAP);
-        if (!is_object($yaml)) throw new \Fgms\EmailInquiriesBundle\Yaml\Exception\TypeMismatchException(
+        if (!is_object($yaml)) throw new \Fgms\Yaml\Exception\TypeMismatchException(
             'object',
             $yaml,
             '',
             $str
         );
-        $wrapper = new \Fgms\EmailInquiriesBundle\Yaml\ValueWrapper($yaml,$str);
+        $wrapper = new \Fgms\Yaml\ValueWrapper($yaml,$str);
         $this->setValueWrapper($wrapper);
     }
 }

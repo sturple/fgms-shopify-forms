@@ -4,7 +4,7 @@ namespace Fgms\EmailInquiriesBundle\Configuration;
 
 class MockValueWrapperConfiguration extends ValueWrapperConfiguration
 {
-    public function __construct(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $wrapper = null)
+    public function __construct(\Fgms\ValueWrapper\ValueWrapper $wrapper = null)
     {
         if (!is_null($wrapper)) $this->setValueWrapper($wrapper);
     }

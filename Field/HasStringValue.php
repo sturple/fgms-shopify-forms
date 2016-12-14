@@ -13,7 +13,7 @@ trait HasStringValue
         return $this->getField()->getParams()->getString('name');
     }
 
-    private function getValue(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $obj)
+    private function getValue(\Fgms\ValueWrapper\ValueWrapper $obj)
     {
         return $obj->getString($this->getName());
     }

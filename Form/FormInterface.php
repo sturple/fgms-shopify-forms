@@ -24,7 +24,7 @@ interface FormInterface
      * @param Submission $submission
      *  A Submission entity representing the submission.
      */
-    public function submit(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $obj, \Fgms\EmailInquiriesBundle\Entity\Submission $submission);
+    public function submit(\Fgms\ValueWrapper\ValueWrapper $obj, \Fgms\EmailInquiriesBundle\Entity\Submission $submission);
 
     /**
      * Creates a Swift_Message for a submission if applicable.

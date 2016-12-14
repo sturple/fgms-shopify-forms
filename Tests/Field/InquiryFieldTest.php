@@ -21,7 +21,7 @@ class InquiryFieldTest extends \PHPUnit_Framework_TestCase
     public function testSubmit()
     {
         $submission = new \Fgms\EmailInquiriesBundle\Entity\Submission();
-        $obj = new \Fgms\EmailInquiriesBundle\Utility\ValueWrapperImpl((object)['inquiry' => 'Hello world!']);
+        $obj = new \Fgms\ValueWrapper\ValueWrapperImpl((object)['inquiry' => 'Hello world!']);
         $this->field->submit($obj,$submission);
         $fss = $submission->getFieldSubmissions();
         $this->assertCount(1,$fss);

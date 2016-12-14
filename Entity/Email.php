@@ -76,7 +76,7 @@ class Email
      */
     public function setTo(array $to)
     {
-        $this->to = \Fgms\EmailInquiriesBundle\Json\Json::encode($to);
+        $this->to = \Fgms\Json\Json::encode($to);
 
         return $this;
     }
@@ -88,7 +88,7 @@ class Email
      */
     public function getTo()
     {
-        return \Fgms\EmailInquiriesBundle\Json\Json::decodeArray($this->to);
+        return \Fgms\Json\Json::decodeArray($this->to);
     }
 
     /**
@@ -148,7 +148,7 @@ class Email
      */
     public function setFrom(array $from)
     {
-        $this->from = \Fgms\EmailInquiriesBundle\Json\Json::encode($from);
+        $this->from = \Fgms\Json\Json::encode($from);
 
         return $this;
     }
@@ -160,7 +160,7 @@ class Email
      */
     public function getFrom()
     {
-        return \Fgms\EmailInquiriesBundle\Json\Json::decodeArray($this->from);
+        return \Fgms\Json\Json::decodeArray($this->from);
     }
 
     /**
@@ -172,7 +172,7 @@ class Email
      */
     public function setCc(array $cc)
     {
-        $this->cc = \Fgms\EmailInquiriesBundle\Json\Json::encode($cc);
+        $this->cc = \Fgms\Json\Json::encode($cc);
 
         return $this;
     }
@@ -184,7 +184,7 @@ class Email
      */
     public function getCc()
     {
-        return \Fgms\EmailInquiriesBundle\Json\Json::decodeArray($this->cc);
+        return \Fgms\Json\Json::decodeArray($this->cc);
     }
 
     /**
@@ -196,7 +196,7 @@ class Email
      */
     public function setBcc(array $bcc)
     {
-        $this->bcc = \Fgms\EmailInquiriesBundle\Json\Json::encode($bcc);
+        $this->bcc = \Fgms\Json\Json::encode($bcc);
 
         return $this;
     }
@@ -208,7 +208,7 @@ class Email
      */
     public function getBcc()
     {
-        return \Fgms\EmailInquiriesBundle\Json\Json::decodeArray($this->bcc);
+        return \Fgms\Json\Json::decodeArray($this->bcc);
     }
 
     /**
@@ -220,7 +220,7 @@ class Email
      */
     public function setSender(array $sender)
     {
-        $this->sender = \Fgms\EmailInquiriesBundle\Json\Json::encode($sender);
+        $this->sender = \Fgms\Json\Json::encode($sender);
 
         return $this;
     }
@@ -232,7 +232,7 @@ class Email
      */
     public function getSender()
     {
-        return \Fgms\EmailInquiriesBundle\Json\Json::decodeArray($this->sender);
+        return \Fgms\Json\Json::decodeArray($this->sender);
     }
 
     /**
@@ -244,7 +244,7 @@ class Email
      */
     public function setReplyTo(array $replyTo)
     {
-        $this->replyTo = \Fgms\EmailInquiriesBundle\Json\Json::encode($replyTo);
+        $this->replyTo = \Fgms\Json\Json::encode($replyTo);
 
         return $this;
     }
@@ -256,7 +256,7 @@ class Email
      */
     public function getReplyTo()
     {
-        return \Fgms\EmailInquiriesBundle\Json\Json::decodeArray($this->replyTo);
+        return \Fgms\Json\Json::decodeArray($this->replyTo);
     }
 
     /**

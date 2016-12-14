@@ -23,7 +23,7 @@ interface FieldInterface
      * @param Submission $submission
      *  The Submission entity associated with this submission.
      */
-    public function submit(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $obj, \Fgms\EmailInquiriesBundle\Entity\Submission $submission);
+    public function submit(\Fgms\ValueWrapper\ValueWrapper $obj, \Fgms\EmailInquiriesBundle\Entity\Submission $submission);
 
     /**
      * Generates sections for the email from submitted

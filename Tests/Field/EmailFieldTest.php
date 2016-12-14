@@ -21,7 +21,7 @@ class EmailFieldTest extends \PHPUnit_Framework_TestCase
     public function testSubmit()
     {
         $submission = new \Fgms\EmailInquiriesBundle\Entity\Submission();
-        $obj = new \Fgms\EmailInquiriesBundle\Utility\ValueWrapperImpl((object)['email' => 'rleahy@fifthgeardev.com']);
+        $obj = new \Fgms\ValueWrapper\ValueWrapperImpl((object)['email' => 'rleahy@fifthgeardev.com']);
         $this->field->submit($obj,$submission);
         $fss = $submission->getFieldSubmissions();
         $this->assertCount(1,$fss);

@@ -61,7 +61,7 @@ abstract class BaseController extends \Symfony\Bundle\FrameworkBundle\Controller
 
     private function createShopifyClientFromStoreName($name)
     {
-        return new \Fgms\EmailInquiriesBundle\Shopify\Client(
+        return new \Fgms\Shopify\Client(
             $this->getApiKey(),
             $this->getSecret(),
             $name

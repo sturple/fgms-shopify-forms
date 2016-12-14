@@ -8,7 +8,7 @@ class ValueWrapperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $inner = new \Fgms\EmailInquiriesBundle\Utility\ValueWrapperImpl((object)[
+        $inner = new \Fgms\ValueWrapper\ValueWrapperImpl((object)[
             'foo' => 'bar'
         ]);
         $this->wrapper = new \Fgms\EmailInquiriesBundle\Form\ValueWrapper($inner);

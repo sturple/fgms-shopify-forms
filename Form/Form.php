@@ -108,7 +108,7 @@ class Form implements FormInterface
         return 'FgmsEmailInquiriesBundle:Email:default.html.twig';
     }
 
-    public function submit(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $obj, \Fgms\EmailInquiriesBundle\Entity\Submission $submission)
+    public function submit(\Fgms\ValueWrapper\ValueWrapper $obj, \Fgms\EmailInquiriesBundle\Entity\Submission $submission)
     {
         $submission->setForm($this->form);
         $obj = new ValueWrapper($obj);

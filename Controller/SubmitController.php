@@ -42,8 +42,8 @@ class SubmitController extends BaseController
         //  Parse body according to content-type
         if ($this->isJson($request)) {
             try {
-                return \Fgms\EmailInquiriesBundle\Json\Json::decodeObject($body);
-            } catch (\Fgms\EmailInquiriesBundle\Json\Exception\Exception $ex) {
+                return \Fgms\Json\Json::decodeObject($body);
+            } catch (\Fgms\Json\Exception\Exception $ex) {
                 throw $this->createBadRequestException(
                     sprintf(
                         'Failed to parse JSON request: %s',
@@ -55,8 +55,8 @@ class SubmitController extends BaseController
         }
         if ($this->isFormUrlEncoded($request)) {
             try {
-                return \Fgms\EmailInquiriesBundle\FormUrlEncoded\FormUrlEncoded::decode($body);
-            } catch (\Fgms\EmailInquiriesBundle\FormUrlEncoded\Exception\Exception $ex) {
+                return \Fgms\FormUrlEncoded\FormUrlEncoded::decode($body);
+            } catch (\Fgms\FormUrlEncoded\Exception\Exception $ex) {
                 throw $this->createBadRequestException(
                     sprintf(
                         'Failed to parse form URL encoded request: %s',

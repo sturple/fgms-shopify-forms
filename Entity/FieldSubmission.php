@@ -99,7 +99,7 @@ class FieldSubmission
      */
     public function setValue($value)
     {
-        $this->value = \Fgms\EmailInquiriesBundle\Json\Json::encode($value);
+        $this->value = \Fgms\Json\Json::encode($value);
 
         return $this;
     }
@@ -111,6 +111,6 @@ class FieldSubmission
      */
     public function getValue()
     {
-        return \Fgms\EmailInquiriesBundle\Json\Json::decodeObject($this->value);
+        return \Fgms\Json\Json::decodeObject($this->value);
     }
 }

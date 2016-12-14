@@ -16,7 +16,7 @@ class HoneypotFieldTest extends \PHPUnit_Framework_TestCase
     public function testSubmit()
     {
         $submission = new \Fgms\EmailInquiriesBundle\Entity\Submission();
-        $obj = new \Fgms\EmailInquiriesBundle\Utility\ValueWrapperImpl((object)['honeypot' => '']);
+        $obj = new \Fgms\ValueWrapper\ValueWrapperImpl((object)['honeypot' => '']);
         $this->field->submit($obj,$submission);
         $fss = $submission->getFieldSubmissions();
         $this->assertCount(0,$fss);
@@ -27,7 +27,7 @@ class HoneypotFieldTest extends \PHPUnit_Framework_TestCase
     public function testSubmitFail()
     {
         $submission = new \Fgms\EmailInquiriesBundle\Entity\Submission();
-        $obj = new \Fgms\EmailInquiriesBundle\Utility\ValueWrapperImpl((object)['honeypot' => 'foo']);
+        $obj = new \Fgms\ValueWrapper\ValueWrapperImpl((object)['honeypot' => 'foo']);
         $this->expectException(\Fgms\EmailInquiriesBundle\Field\Exception\HoneypotException::class);
         $this->expectExceptionMessage('Field "honeypot" not empty (has value "foo")');
         $this->field->submit($obj,$submission);

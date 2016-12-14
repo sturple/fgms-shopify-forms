@@ -78,7 +78,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->setCreated(clone $dt)
             ->setReferer('http://google.ca');
         $form = $this->create();
-        $request = new \Fgms\EmailInquiriesBundle\Utility\ValueWrapperImpl(new \stdClass());
+        $request = new \Fgms\ValueWrapper\ValueWrapperImpl(new \stdClass());
         $form->submit($request,$submission);
         //  Verify Submission entity
         $this->assertSame('127.0.0.1',$submission->getIp());

@@ -150,7 +150,7 @@ class Field
      */
     public function setParams($params)
     {
-        $this->params = \Fgms\EmailInquiriesBundle\Json\Json::encode($params);
+        $this->params = \Fgms\Json\Json::encode($params);
 
         return $this;
     }
@@ -162,7 +162,7 @@ class Field
      */
     public function getParams()
     {
-        return \Fgms\EmailInquiriesBundle\Json\Json::decodeObject($this->params);
+        return \Fgms\Json\Json::decodeObject($this->params);
     }
 
     /**

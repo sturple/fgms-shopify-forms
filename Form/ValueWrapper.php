@@ -2,7 +2,7 @@
 
 namespace Fgms\EmailInquiriesBundle\Form;
 
-class ValueWrapper extends \Fgms\EmailInquiriesBundle\Utility\ValueWrapperDecorator
+class ValueWrapper extends \Fgms\ValueWrapper\ValueWrapperDecorator
 {
     public function raiseMissing($key)
     {

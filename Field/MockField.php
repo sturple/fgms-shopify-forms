@@ -29,7 +29,7 @@ class MockField extends Field
         return $this;
     }
 
-    public function submit(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $obj, \Fgms\EmailInquiriesBundle\Entity\Submission $submission)
+    public function submit(\Fgms\ValueWrapper\ValueWrapper $obj, \Fgms\EmailInquiriesBundle\Entity\Submission $submission)
     {
         if (!is_null($this->wrapper)) throw new \LogicException('submit invoked again');
         $this->submission = $submission;

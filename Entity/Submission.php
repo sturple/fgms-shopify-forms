@@ -90,7 +90,7 @@ class Submission
      */
     public function setCreated(\DateTime $created)
     {
-        $this->created = \Fgms\EmailInquiriesBundle\Utility\DateTime::toDoctrine($created);
+        $this->created = \Fgms\Doctrine\DateTime::toDoctrine($created);
 
         return $this;
     }
@@ -102,7 +102,7 @@ class Submission
      */
     public function getCreated()
     {
-        return $this->created = \Fgms\EmailInquiriesBundle\Utility\DateTime::fromDoctrine($this->created);
+        return $this->created = \Fgms\Doctrine\DateTime::fromDoctrine($this->created);
     }
 
     /**

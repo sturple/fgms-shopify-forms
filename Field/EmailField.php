@@ -11,7 +11,7 @@ class EmailField extends TemplateField
 {
     use HasStringValue;
 
-    public function submit(\Fgms\EmailInquiriesBundle\Utility\ValueWrapper $obj, \Fgms\EmailInquiriesBundle\Entity\Submission $submission)
+    public function submit(\Fgms\ValueWrapper\ValueWrapper $obj, \Fgms\EmailInquiriesBundle\Entity\Submission $submission)
     {
         $email = $this->getValue($obj);
         $this->getFieldSubmission($submission)
