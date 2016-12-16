@@ -17,7 +17,7 @@
     ],
     "require": {
         "league/csv": "8.0",
-        "sturple/common" : "@dev"
+        "sturple/common" : "~0.0"
     },
     "minimum-stability": "dev",
     "target-dir": "Fgms/EmailInquiriesBundle",
