@@ -1,9 +1,9 @@
 {
-    "name": "sturple/fgms-shopify-forms",
+    "name": "sturple/shopify-forms",
     "description": "Shopify Forms Bundle (Embed)",
     "type": "symfony-bundle",
     "keywords": ["shopify", "oauth","embed", "symfony","forms"],
-    "homepage": "https://github.com/sturple/fgms-shopify-forms",
+    "homepage": "https://github.com/sturple/shopify-forms",
     "license": "MIT",
     "authors": [
         {
