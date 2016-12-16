@@ -16,14 +16,9 @@
         }
     ],
     "require": {
-        "league/csv": "8.0"
+        "league/csv": "8.0",
+        "sturple/common" : "@dev"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/sturple/common"
-        }
-    ],
     "minimum-stability": "dev",
     "target-dir": "Fgms/EmailInquiriesBundle",
     "autoload" : {
