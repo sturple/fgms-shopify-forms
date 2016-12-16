@@ -1,4 +1,4 @@
-# Shopify Special Offers Bundle (Embed)
+# Shopify Forms Bundle (Embed)
 
 ## Installation
 
