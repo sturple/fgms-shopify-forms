@@ -16,8 +16,7 @@
         }
     ],
     "require": {
-        "league/csv": "8.0",
-        "sturple/common": "dev-master"
+        "league/csv": "8.0"
     },
     "repositories": [
         {
