@@ -18,7 +18,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('fgms_email_inquiries');
+        $rootNode = $treeBuilder->root($this->getExtensionAlias());
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for
@@ -34,5 +34,9 @@ class Configuration implements ConfigurationInterface
             ->end();
 
         return $treeBuilder;
+    }
+    
+    public function getExtensionAlias() {
+        return 'fgms_email_inquiries';
     }
 }
