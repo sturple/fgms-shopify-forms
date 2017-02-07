@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="Fgms\EmailInquiriesBundle\Repository\StoreRepository")
- * @ORM\Table(name="fgms_emailinquiries_store",uniqueConstraints={@ORM\UniqueConstraint(name="name_idx",columns={"name"})})
+ * @ORM\Table(name="shopify_forms_store",uniqueConstraints={@ORM\UniqueConstraint(name="name_idx",columns={"name"})})
  */
 class Store
 {

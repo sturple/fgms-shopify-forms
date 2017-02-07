@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="Fgms\EmailInquiriesBundle\Repository\SubmissionRepository")
- * @ORM\Table(name="fgms_emailinquiries_submission")
+ * @ORM\Table(name="shopify_forms_submission")
  */
 class Submission
 {
